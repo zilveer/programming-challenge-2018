@@ -1,66 +1,60 @@
 let scope = {};
 
-((scope, $) =>
-{
+((scope, $) => {
     //let scope.smth will create "public" variable accessible by scope.smth
     //let smth will create local variable not accessible in console
     const GAME = {
         pot: 0,
         cardsOnTable: [],
-        numberOfPlayers: null
+        numberOfPlayers: null,
+        players: []
     };
     let deck;
 
-    /* Create the deck of cards */
     deck = new Deck();
     deck.shuffleDeck();
 
-    /* Place 5 cards on the table */
-    for (let i = 0; i < 5; i++)
-    {
+    for (let i = 0; i < 6; i++) {
         let cardDrawn = deck.drawCard();
         cardDrawn.addToTable();
         GAME.cardsOnTable.push(cardDrawn);
     }
 
-    setupPlayer("John Doe");
+    // const playerCard_1 = $(#)
 
     // Raise amount input and slider
-    const raiseInput    = document.getElementById('raiseInput');
-    const raiseSlider   = document.getElementById('raiseSlider');
-    raiseSlider.oninput = () =>
-    {
+    const raiseInput = document.getElementById('raiseInput');
+    const raiseSlider = document.getElementById('raiseSlider');
+    raiseSlider.oninput = () => {
         raiseInput.value = raiseSlider.value;
-    };
+    }
 
-    /**
-     *
-     * @param playerName
-     */
-    function setupPlayer(playerName)
-    {
-        let playerNameHolder = $("#playerName");
+    raiseInput.onchange = () => {
+        /* magic that should not be used in real thingy, but i like it c:
+        sets max value to 100 and min to 1 */
+        raiseInput.value = Math.min(Math.max(raiseInput.value, 1), 100);
+        raiseSlider.value = raiseInput.value;
+    }
 
-        playerNameHolder.text(playerName);
+    // Load modal
+    $('#startGameModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
 
-        /* Create a new player */
-        let player_1 = new Player(playerName);
+    // Button that starts the game
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', startGame);
 
-        /* Give the player two cards */
-        for (let i = 0; i < 2; i++)
-        {
-            /* Draw a card from the deck and hand it to the player */
-            player_1.addCard(deck.drawCard());
+    function startGame() {
+        GAME.numberOfPlayers = document.getElementById('numberOfPlayers').value;
+        const initialStake = document.getElementById('initalStake').value;
+
+        for (var i = 0; i < GAME.numberOfPlayers; i++) {
+            GAME.players.push(new Player('bob', initialStake));
         }
 
-        /* Show the card image for the 2 cards */
-        for (let i = 0; i < 2; i++)
-        {
-            $("#playerCard" + (i+1)).attr("src", player_1.cards[i].imagePath);
-        }
-
-        // playerCard_1.attr("src", player_1.cards[0].imagePath);
-        // playerCard_2.attr("src", player_1.cards[1].imagePath);
+        console.log(GAME.players);
     }
 
 })(scope, jQuery);
