@@ -6,19 +6,18 @@ class Card{
         this.value = value;
         this.imagePath = imagePath;
         this.visible = true;
+        this.image = new Image();
     }
 
     flip(){
         this.visible = !this.visible;
     }
 
-    loadImage(){
-        let tempImage= new Image();
-        tempImage.onload(()=>{
-            tempImage.src = this.image;
-        });
-        this.image = tempImage;
-        return tempImage;
+    addToTable(){
+        this.image.onload = function(){
+            $('main').append(`<img src='${this.src}'>`);
+        };
+        this.image.src = this.imagePath;
     }
 
 

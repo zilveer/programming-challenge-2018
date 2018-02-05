@@ -18,7 +18,7 @@ class Player
     }
 
     /* Used to assign this player with a set of cards */
-    cardsOnHand(card)
+    addCard(card)
     {
         this.cards.push(card);
     }

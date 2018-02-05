@@ -14,7 +14,7 @@ class Deck{
     //populates the deck with all of the cards
     populateDeck(){
         for(let i=0; i<13; i++){
-            let card = new Card("figure1", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
+            let card = new Card("figure1", i+1, `symbol ${i}`, "./assets/Playing Cards/Playing Cards (.SVG)/2_of_clubs.svg");
             this.cards.push(card);
         }
         
