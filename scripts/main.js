@@ -47,6 +47,7 @@ const scope = {};
     startButton.addEventListener('click', startGame);
 
     function startGame() {
+        deck = new Deck();
         GAME.numberOfPlayers = document.getElementById('numberOfPlayers').value;
         const initialStake = document.getElementById('initalStake').value;
 
@@ -55,7 +56,6 @@ const scope = {};
         }
 
         console.log(GAME.players);
-        deck = new Deck();
     }
 
     /**
