@@ -11,14 +11,13 @@
 
     <title>Texas hold'em</title>
 
-
-    <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script defer src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    
+    <script defer src="./scripts/player.js"></script>
+    <script defer src="scripts/chip.js"></script>
     <script defer src="scripts/card.js"></script>
     <script defer src="scripts/deck.js"></script>
     <script defer src="scripts/main.js"></script>
@@ -75,6 +74,14 @@
             <button id="foldButton" class="btn btn-primary" type="button" name="button">Fold</button>
             <button id="checkCallButton" class="btn btn-primary" type="button" name="button">Check</button>
             <button id="raiseButton" class="btn btn-success" type="button" name="button">Raise</button>
+          </div>
+
+          <div class="mt-2 col-sm-12">
+            <label for="raiseInput">Raise amount:</label>
+            <input id="raiseInput" type="text" name="raiseAmount" value="1">
+          </div>
+          <div class="col-sm-12">
+            <input id="raiseSlider" type="range" min="1" max="100" value="1">
           </div>
 
           <div class="mt-2 border-top"></div>
