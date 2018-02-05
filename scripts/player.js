@@ -1,6 +1,9 @@
 class Player {
 
-  constructor() {
+  constructor( ) {
+    // this.name
 
   }
+
+
 }
