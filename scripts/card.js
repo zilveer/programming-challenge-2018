@@ -1,8 +1,7 @@
 class Card{
     
-    constructor(figure, value, symbol, imagePath){
+    constructor(figure, value, imagePath){
         this.figure = figure;
-        this.symbol = symbol;
         this.value = value;
         this.imagePath = imagePath;
         this.visible = true;

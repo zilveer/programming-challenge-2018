@@ -9,19 +9,41 @@ let scope = {};
       tableCards: [],
       numberOfPlayers: null
     };
-
     let deck_1;
     // /* Set up the deck */
     deck_1 = new Deck();
+
+
 
     deck_1.shuffleDeck();
 
     // console.log("\n\n\n\n");
     let cardDrown = deck_1.drawCard();
-
     //adding cards to the table
     cardDrown.addToTable();
     GAME.tableCards.push(cardDrown);
+    // console.log("\n\n\n\n");
+    cardDrown = deck_1.drawCard();
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+    cardDrown = deck_1.drawCard();
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+    cardDrown = deck_1.drawCard();
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+    cardDrown = deck_1.drawCard();
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+
+
+    
+
+
 
     // Raise amount input and slider
     const raiseInput = document.getElementById('raiseInput');

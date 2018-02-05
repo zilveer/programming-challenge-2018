@@ -14,7 +14,6 @@ class Player
         /* Used to determine if a player has folded */
         this.fold = false;
 
-
     }
 
     /* Used to assign this player with a set of cards */
