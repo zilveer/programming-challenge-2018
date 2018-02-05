@@ -19,8 +19,23 @@ let scope = {};
 
     // console.log("\n\n\n\n");
     let cardDrown = deck_1.drawCard();
-
-
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+    // console.log("\n\n\n\n");
+    cardDrown = deck_1.drawCard();
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+    cardDrown = deck_1.drawCard();
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+    cardDrown = deck_1.drawCard();
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
+    cardDrown = deck_1.drawCard();
     //adding cards to the table
     cardDrown.addToTable();
     GAME.tableCards.push(cardDrown);
