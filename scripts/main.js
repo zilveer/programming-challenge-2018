@@ -13,8 +13,6 @@ let scope = {};
     // /* Set up the deck */
     deck_1 = new Deck();
 
-
-
     deck_1.shuffleDeck();
 
     // console.log("\n\n\n\n");
@@ -39,11 +37,6 @@ let scope = {};
     //adding cards to the table
     cardDrown.addToTable();
     GAME.tableCards.push(cardDrown);
-
-
-    
-
-
 
     // Raise amount input and slider
     const raiseInput = document.getElementById('raiseInput');
