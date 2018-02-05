@@ -1,4 +1,4 @@
-class deck{
+class Deck{
     constructor(){
         this.cards = [];
     }
