@@ -1,6 +1,6 @@
 let scope = {};
 
-(scope =>
+((scope,$) =>
 {
     //let scope.smth will create "public" variable accessible by scope.smth
     //let smth will create local variable not accessible in console
@@ -9,23 +9,26 @@ let scope = {};
       tableCards: [],
       numberOfPlayers: null
     };
-    let deck_1;
-    // /* Set up the deck */
+    $('document').ready(function(){
+        let deck_1;
+        // /* Set up the deck */
         deck_1 = new Deck();
 
 
 
-    deck_1.shuffleDeck();
+        deck_1.shuffleDeck();
 
-    // console.log("\n\n\n\n");
-    let cardDrown = deck_1.drawCard();
-
-
-    //adding cards to the table
-    cardDrown.addToTable();
-    GAME.tableCards.push(cardDrown);
+        // console.log("\n\n\n\n");
+        let cardDrown = deck_1.drawCard();
 
 
+        //adding cards to the table
+        cardDrown.addToTable();
+        GAME.tableCards.push(cardDrown);
+
+    });
+    
 
 
-})(scope);
+
+})(scope,jQuery);
