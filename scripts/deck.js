@@ -1,7 +1,7 @@
 class Deck{
     constructor(){
         this.cards = [];
-        populateDeck();
+        this.populateDeck();
     }
 
     addCard(card){
