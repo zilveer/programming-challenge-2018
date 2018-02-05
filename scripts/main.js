@@ -60,7 +60,7 @@ const scope = {};
     raiseButton.click(() =>
     {
         $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
-
+    });
     function startGame() {
         GAME.numberOfPlayers = document.getElementById('numberOfPlayers').value;
         const initialStake = document.getElementById('initalStake').value;
@@ -73,7 +73,7 @@ const scope = {};
 
         console.log(GAME.players);
     }
-
+    
     /**
      * Assigns 2 cards to a player and returns the Player object
      * @param playerName
