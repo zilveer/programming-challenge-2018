@@ -6,6 +6,10 @@ class Card{
         this.imagePath = imagePath;
         this.visible = true;
         this.image = new Image();
+
+        const ratio = 324/223;
+        this.width = 100;
+        this.height = this.width*ratio;
     }
 
     flip(){
@@ -13,8 +17,8 @@ class Card{
     }
 
     addToTable(){
-        this.image.onload = function(){
-            $('main').append(`<img src='${this.src}'>`);
+        this.image.onload = () => {
+            $('main').append(`<img src='${this.image.src}' width='${this.width}' height='${this.height}'>`);
         };
         this.image.src = this.imagePath;
     }
