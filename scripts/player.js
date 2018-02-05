@@ -1,7 +1,5 @@
-class Player
-{
-    constructor(name, stake = 5000)
-    {
+class Player {
+    constructor(name, stake = 5000) {
         /* Players name */
         this.name = name;
 
@@ -17,17 +15,14 @@ class Player
     }
 
     /* Used to assign this player with a set of cards */
-    addCard(card)
-    {
+    addCard(card) {
         this.cards.push(card);
     }
 
     /* Let this player place a bet of a certain amount */
-    placeBet(betAmount)
-    {
+    placeBet(betAmount) {
         /* Player cannot bet with more money than he has */
-        if (betAmount <= this.stake)
-        {
+        if (betAmount <= this.stake) {
             this.stake -= betAmount;
         }
     }
