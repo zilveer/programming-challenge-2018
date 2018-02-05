@@ -23,4 +23,11 @@ let scope = {};
     cardDrown.addToTable();
     GAME.tableCards.push(cardDrown);
 
+    // Raise amount input and slider
+    const raiseInput = document.getElementById('raiseInput');
+    const raiseSlider = document.getElementById('raiseSlider');
+    raiseSlider.oninput = () => {
+      raiseInput.value = raiseSlider.value;
+    }
+
 })(scope,jQuery);
