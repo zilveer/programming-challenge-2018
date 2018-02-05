@@ -19,7 +19,6 @@ class Deck
         this.cards.push(card);
     }
 
-
     /**
      * Populates the deck with all of the cards
      */

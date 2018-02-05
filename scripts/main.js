@@ -45,13 +45,30 @@ const scope = {};
     // Button that starts the game
     const startButton = document.getElementById('startButton');
     startButton.addEventListener('click', startGame);
+    const foldButton  = $("#foldButton");
+    const raiseButton = $('#raiseButton');
+
+    console.log(GAME.currentPlayer);
+    foldButton.on("click", function ()
+    {
+        const currentPlayer = (++currentPlayerIndex < GAME.players.length) ? currentPlayerIndex : 0;
+        setCurrentPlayer(currentPlayer);
+        console.log(GAME.currentPlayer);
+
+    });
+
+    raiseButton.click(() =>
+    {
+        $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
 
     function startGame() {
         GAME.numberOfPlayers = document.getElementById('numberOfPlayers').value;
         const initialStake = document.getElementById('initalStake').value;
 
-        for (var i = 0; i < GAME.numberOfPlayers; i++) {
-            GAME.players.push(setupPlayer("Bob", initialStake));
+        /* Put each player inside an array */
+        for (var i = 0; i < GAME.numberOfPlayers; i++)
+        {
+            GAME.players.push(setupPlayer("Bob " + i, initialStake));
         }
 
         console.log(GAME.players);
