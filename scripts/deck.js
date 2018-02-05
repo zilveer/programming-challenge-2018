@@ -1,10 +1,30 @@
 class Deck{
     constructor(){
         this.cards = [];
+        populateDeck();
     }
 
     addCard(card){
         this.cards.push(card);
+    }
+
+    populateDeck(){
+        for(let i=0; i<13; i++){
+            let card = new Card("figure1", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
+            this.cards.push(card);
+        }
+        for(let i=0; i<13; i++){
+            let card = new Card("figure2", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
+            this.cards.push(card);
+        }
+        for(let i=0; i<13; i++){
+            let card = new Card("figure3", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
+            this.cards.push(card);
+        }
+        for(let i=0; i<13; i++){
+            let card = new Card("figure4", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
+            this.cards.push(card);
+        }
     }
 
 
