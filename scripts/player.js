@@ -1,12 +1,12 @@
 class Player
 {
-    constructor(name, funds = 5000)
+    constructor(name, stake = 5000)
     {
         /* Players name */
         this.name = name;
 
         /* The amount of money the player has */
-        this.funds = funds;
+        this.stake = stake;
 
         /* Holds the array of cards a player */
         this.cards = [];
@@ -26,9 +26,9 @@ class Player
     placeBet(betAmount)
     {
         /* Player cannot bet with more money than he has */
-        if (betAmount <= funds)
+        if (betAmount <= this.stake)
         {
-            this.funds -= betAmount;
+            this.stake -= betAmount;
         }
     }
 
