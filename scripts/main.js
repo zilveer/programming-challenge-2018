@@ -11,10 +11,10 @@ let scope = {};
     };
     let deck;
 
-    deck     = new Deck();
+    deck = new Deck();
     deck.shuffleDeck();
 
-    for(let i=0; i<6; i++)
+    for(let i=0; i<5; i++)
     {
         let cardDrawn = deck.drawCard();
         cardDrawn.addToTable();
@@ -37,5 +37,9 @@ let scope = {};
         raiseInput.value = Math.min(Math.max(raiseInput.value,1), 100);
         raiseSlider.value = raiseInput.value;
     }
+
+    $('#raiseButton').click(()=>{
+        //$('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
+    });
 
 })(scope, jQuery);
