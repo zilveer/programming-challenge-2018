@@ -14,7 +14,7 @@ const scope = {};
     deck = new Deck();
     deck.shuffleDeck();
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 5; i++) {
         let cardDrawn = deck.drawCard();
         cardDrawn.addToTable();
         GAME.cardsOnTable.push(cardDrawn);
@@ -34,6 +34,10 @@ const scope = {};
         raiseSlider.value = raiseInput.value;
     }
 
+    $('#raiseButton').click(() => {
+        $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
+    });
+
     // source: https://stackoverflow.com/questions/9894339/disallow-twitter-bootstrap-modal-window-from-closing
     // Load modal
     $('#startGameModal').modal({
@@ -50,10 +54,38 @@ const scope = {};
         const initialStake = document.getElementById('initalStake').value;
 
         for (var i = 0; i < GAME.numberOfPlayers; i++) {
-            GAME.players.push(new Player('bob', initialStake));
+            GAME.players.push(setupPlayer("Bob", initialStake));
         }
 
         console.log(GAME.players);
+    }
+
+    /**
+     * Assigns 2 cards to a player and returns the Player object
+     * @param playerName
+     * @param stake
+     * @returns {Player}
+     */
+    function setupPlayer(playerName, stake) {
+        let playerNameHolder = $("#playerName");
+
+        playerNameHolder.text(playerName);
+
+        /* Create a new player */
+        let player = new Player(playerName, stake);
+
+        /* Give the player two cards */
+        for (let i = 0; i < 2; i++) {
+            /* Draw a card from the deck and hand it to the player */
+            player.addCard(deck.drawCard());
+        }
+
+        /* Show the card image for the 2 cards */
+        for (let i = 0; i < 2; i++) {
+            $("#playerCard" + (i + 1)).attr("src", player.cards[i].imagePath);
+        }
+
+        return player;
     }
 
 })(scope, jQuery);
