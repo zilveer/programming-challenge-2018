@@ -45,4 +45,10 @@ let scope = {};
       raiseInput.value = raiseSlider.value;
     }
 
+    // Load modal
+    $('#startGameModal').modal({
+      backdrop: 'static',
+      keyboard: false
+    });
+
 })(scope,jQuery);
