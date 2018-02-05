@@ -1,10 +1,10 @@
 class Card{
     
-    constructor(figure, value, symbol, image){
+    constructor(figure, value, symbol, imagePath){
         this.figure = figure;
         this.symbol = symbol;
         this.value = value;
-        this.image = image;
+        this.imagePath = imagePath;
         this.visible = true;
     }
 
@@ -14,7 +14,11 @@ class Card{
 
     loadImage(){
         let tempImage= new Image();
-        tempImage.src = image;
+        tempImage.onload(()=>{
+            tempImage.src = this.image;
+        });
+        this.image = tempImage;
+        return tempImage;
     }
 
 
