@@ -12,25 +12,38 @@ class Deck{
     }
 
     //populates the deck with all of the cards
-    populateDeck(){
-        for(let i=0; i<13; i++){
-            let card = new Card("figure1", i+1, `symbol ${i}`, "./assets/Playing Cards/Playing Cards (.SVG)/2_of_clubs.svg");
+    populateDeck()
+    {
+        //jack 11
+        //queen 12
+        //king 13
+        //ace 14
+
+        for (let i = 2; i < 15; i++)
+        {
+            let card = new Card("Spade", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_spades.png`);
+            this.cards.push(card);
+            console.log(card);
+        }
+
+        for (let i = 2; i < 15; i++)
+        {
+            let card = new Card("Clubs", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_clubs.png`);
             this.cards.push(card);
         }
-        
-        for(let i=0; i<13; i++){
-            let card = new Card("figure2", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
+
+        for (let i = 2; i < 15; i++)
+        {
+            let card = new Card("Heart", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_hearts.png`);
             this.cards.push(card);
         }
-        for(let i=0; i<13; i++){
-            let card = new Card("figure3", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
+
+        for (let i = 2; i < 15; i++)
+        {
+            let card = new Card("Diamond", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_diamonds.png`);
             this.cards.push(card);
         }
-        for(let i=0; i<13; i++){
-            let card = new Card("figure4", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
-            this.cards.push(card);
-        }
-        
+
     }
 
 
