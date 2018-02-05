@@ -22,10 +22,8 @@ class Deck{
     }
 
     drawCard(){
-        let rand = Math.floor(Math.random()*(this.cards.length));
-        let cardToReturn = this.cards[rand];
-        this.cards.splice(rand, 1);
-        return cardToReturn;
+        let card = a.shift();
+        return card;
     }
 
     numberOfCards(){
