@@ -64,10 +64,13 @@ const scope = {};
     const foldButton  = $("#foldButton");
     const raiseButton = $('#raiseButton');
 
+    console.log(GAME.currentPlayer);
     foldButton.on("click", function ()
     {
         const currentPlayer = (++currentPlayerIndex < GAME.players.length) ? currentPlayerIndex : 0;
         setCurrentPlayer(currentPlayer);
+        console.log(GAME.currentPlayer);
+
     });
 
     raiseButton.click(() =>
@@ -88,7 +91,7 @@ const scope = {};
         /* Put each player inside an array */
         for (var i = 0; i < GAME.numberOfPlayers; i++)
         {
-            GAME.players.push(setupPlayer("Bob", initialStake));
+            GAME.players.push(setupPlayer("Bob " + i, initialStake));
         }
 
         /* Make the first player the current player */
