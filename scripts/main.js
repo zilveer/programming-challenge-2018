@@ -4,6 +4,12 @@ let scope = {};
 {
     //let scope.smth will create "public" variable accessible by scope.smth
     //let smth will create local variable not accessible in console
+    const GAME = {
+      pot: 0,
+      tableCards: [],
+      numberOfPlayers: null
+    };
+
     window.onload = function ()
     {
         // /* Set up the deck */
@@ -20,4 +26,3 @@ let scope = {};
     }
 
 })(scope);
-
