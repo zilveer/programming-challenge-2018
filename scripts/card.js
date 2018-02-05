@@ -15,7 +15,7 @@ class Card{
 
     addToTable(){
         this.image.onload = function(){
-            $('#game').append(`<img src='${this.src}'>`);
+            $('main').append(`<img src='${this.src}'>`);
         };
         this.image.src = this.imagePath;
     }
