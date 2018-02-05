@@ -15,7 +15,7 @@ class Deck{
                 let randomPos = Math.floor((Math.random()*(this.cards.length-i))+i);
                 let tempCard = this.cards[randomPos];
                 this.cards[randomPos] = this.cards[i];
-                this.cards[i] = this.cards[randomPos];
+                this.cards[i] = tempCard;
             }
         }
 
