@@ -31,4 +31,11 @@ let scope = {};
         raiseInput.value = raiseSlider.value;
     }
 
+    raiseInput.onchange = ()=>{
+        /* magic that should not be used in real thingy, but i like it c:
+        sets max value to 100 and min to 1 */
+        raiseInput.value = Math.min(Math.max(raiseInput.value,1), 100);
+        raiseSlider.value = raiseInput.value;
+    }
+
 })(scope, jQuery);
