@@ -9,10 +9,7 @@ const scope = {};
         numberOfPlayers: null,
         players: []
     };
-    let deck;
-
-    deck = new Deck();
-    deck.shuffleDeck();
+    let deck = new Deck();
 
     for (let i = 0; i < 5; i++) {
         let cardDrawn = deck.drawCard();
