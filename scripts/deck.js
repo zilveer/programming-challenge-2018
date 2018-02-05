@@ -16,17 +16,15 @@ class Deck{
                 let randomPos = Math.floor((Math.random()*(this.cards.length-i))+i);
                 let tempCard = this.cards[randomPos];
                 this.cards[randomPos] = this.cards[i];
-                this.cards[i] = this.cards[randomPos];
+                this.cards[i] = tempCard;
             }
         }
 
     }
 
     drawCard(){
-        let rand = Math.floor(Math.random()*(this.cards.length));
-        let cardToReturn = this.cards[rand];
-        this.cards.splice(rand, 1);
-        return cardToReturn;
+        let card = a.shift();
+        return card;
     }
 
     numberOfCards(){
