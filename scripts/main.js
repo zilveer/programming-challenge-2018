@@ -1,4 +1,4 @@
-let scope = {};
+const scope = {};
 
 ((scope, $) => {
     //let scope.smth will create "public" variable accessible by scope.smth
@@ -20,8 +20,6 @@ let scope = {};
         GAME.cardsOnTable.push(cardDrawn);
     }
 
-    // const playerCard_1 = $(#)
-
     // Raise amount input and slider
     const raiseInput = document.getElementById('raiseInput');
     const raiseSlider = document.getElementById('raiseSlider');
@@ -36,6 +34,7 @@ let scope = {};
         raiseSlider.value = raiseInput.value;
     }
 
+    // source: https://stackoverflow.com/questions/9894339/disallow-twitter-bootstrap-modal-window-from-closing
     // Load modal
     $('#startGameModal').modal({
         backdrop: 'static',
