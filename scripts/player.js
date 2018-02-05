@@ -3,7 +3,7 @@ class Player
     constructor(name, funds)
     {
         /* Players name */
-        this.name  = name;
+        this.name = name;
 
         /* The amount of money the player has */
         this.funds = funds;
