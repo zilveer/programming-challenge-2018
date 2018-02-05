@@ -10,6 +10,7 @@ class Deck{
 
     shuffleDeck(){
 
+        /* Shuffle the card deck 5 times */
         for(let j=0; j<5; j++){
             for(let i=0; i<this.cards.length; i++){
                 let randomPos = Math.floor((Math.random()*(this.cards.length-i))+i);
