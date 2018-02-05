@@ -9,20 +9,25 @@ let scope = {};
       tableCards: [],
       numberOfPlayers: null
     };
-
-    window.onload = function ()
-    {
+    let deck_1;
+    window.onload = function (){
         // /* Set up the deck */
-         let deck_1 = new Deck();
+         deck_1 = new Deck();
 
 
 
         deck_1.shuffleDeck();
 
         // console.log("\n\n\n\n");
-        let drewCard = deck_1.drawCard();
+        let cardDrown = deck_1.drawCard();
 
+
+        //adding cards to the table
+        cardDrown.addToTable();
+        GAME.tableCards.push(cardDrown);
 
     }
+
+
 
 })(scope);
