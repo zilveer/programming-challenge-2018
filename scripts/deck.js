@@ -63,7 +63,7 @@ class Deck
         {
             for (let i = 0; i < this.cards.length; i++)
             {
-                /* Get random position between 0 and the number of cards in the array */
+                /* Get random position between i and the number of cards in the array */
                 let randomPos         = Math.floor((Math.random() * (this.cards.length - i)) + i);
                 let tempCard          = this.cards[randomPos];
                 this.cards[randomPos] = this.cards[i];
