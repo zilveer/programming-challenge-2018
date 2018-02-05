@@ -8,6 +8,7 @@ class Deck
     {
         this.cards = [];
         this.populateDeck();
+        this.shuffleDeck();
     }
 
     /**
@@ -18,11 +19,13 @@ class Deck
         this.cards.push(card);
     }
 
+
     /**
      * Populates the deck with all of the cards
      */
     populateDeck()
     {
+        this.cards = [];
         //jack 11
         //queen 12
         //king 13
