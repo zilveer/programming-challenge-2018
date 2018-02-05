@@ -1,6 +1,6 @@
 class Player
 {
-    constructor(name, funds)
+    constructor(name, funds = 5000)
     {
         /* Players name */
         this.name = name;
