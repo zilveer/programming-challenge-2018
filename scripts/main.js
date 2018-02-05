@@ -10,23 +10,21 @@ let scope = {};
       numberOfPlayers: null
     };
     let deck_1;
-    window.onload = function (){
-        // /* Set up the deck */
-         deck_1 = new Deck();
+    // /* Set up the deck */
+        deck_1 = new Deck();
 
 
 
-        deck_1.shuffleDeck();
+    deck_1.shuffleDeck();
 
-        // console.log("\n\n\n\n");
-        let cardDrown = deck_1.drawCard();
+    // console.log("\n\n\n\n");
+    let cardDrown = deck_1.drawCard();
 
 
-        //adding cards to the table
-        cardDrown.addToTable();
-        GAME.tableCards.push(cardDrown);
+    //adding cards to the table
+    cardDrown.addToTable();
+    GAME.tableCards.push(cardDrown);
 
-    }
 
 
 
