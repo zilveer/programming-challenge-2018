@@ -1,20 +1,26 @@
 class Deck
 {
 
-    //creates an array and populates the deck when creating new instance of an object
+    /**
+     * Creates an array and populates the deck when creating new instance of an object.
+     */
     constructor()
     {
         this.cards = [];
         this.populateDeck();
     }
 
-    //add certain cards, probably will not be used anymore
+    /**
+     * Add certain cards, probably will not be used anymore
+     */
     addCard(card)
     {
         this.cards.push(card);
     }
 
-    //populates the deck with all of the cards
+    /**
+     * Populates the deck with all of the cards
+     */
     populateDeck()
     {
         //jack 11
@@ -45,27 +51,29 @@ class Deck
             let card = new Card("Diamond", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_diamonds.svg`);
             this.cards.push(card);
         }
-
     }
 
     shuffleDeck()
     {
-
         /* Shuffle the card deck 5 times */
         for (let j = 0; j < 5; j++)
         {
             for (let i = 0; i < this.cards.length; i++)
             {
+                /* Get random position between 0 and the number of cards in the array */
                 let randomPos         = Math.floor((Math.random() * (this.cards.length - i)) + i);
                 let tempCard          = this.cards[randomPos];
                 this.cards[randomPos] = this.cards[i];
                 this.cards[i]         = tempCard;
             }
         }
-
     }
 
-    //draws card from the top of the deck and deletes if from it
+    /**
+     * Draws card from the top of the deck and deletes if from the card array
+     * The returned card will be removed from the deck of cards
+     * @returns {*}
+     */
     drawCard()
     {
         let card = this.cards.shift();
