@@ -11,14 +11,11 @@ const scope = {};
     };
     let deck;
 
-    deck = new Deck();
-    deck.shuffleDeck();
-
-    for (let i = 0; i < 5; i++) {
-        let cardDrawn = deck.drawCard();
-        cardDrawn.addToTable();
-        GAME.cardsOnTable.push(cardDrawn);
-    }
+    // for (let i = 0; i < 5; i++) {
+    //     let cardDrawn = deck.drawCard();
+    //     cardDrawn.addToTable();
+    //     GAME.cardsOnTable.push(cardDrawn);
+    // }
 
     // Raise amount input and slider
     const raiseInput = document.getElementById('raiseInput');
@@ -58,6 +55,7 @@ const scope = {};
         }
 
         console.log(GAME.players);
+        deck = new Deck();
     }
 
     /**
