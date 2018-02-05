@@ -14,16 +14,6 @@ const scope = {};
     let currentPlayerIndex = 0;
     let deck;
 
-    deck = new Deck();
-    deck.shuffleDeck();
-
-    for (let i = 0; i < 5; i++)
-    {
-        let cardDrawn = deck.drawCard();
-        cardDrawn.addToTable();
-        GAME.cardsOnTable.push(cardDrawn);
-    }
-
     // for (let i = 0; i < 5; i++) {
     //     let cardDrawn = deck.drawCard();
     //     cardDrawn.addToTable();
