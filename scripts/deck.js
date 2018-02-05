@@ -24,26 +24,25 @@ class Deck
 
         for (let i = 2; i < 15; i++)
         {
-            let card = new Card("Spade", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_spades.png`);
-            this.cards.push(card);
-            console.log(card);
-        }
-
-        for (let i = 2; i < 15; i++)
-        {
-            let card = new Card("Clubs", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_clubs.png`);
+            let card = new Card("Spade", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_spades.svg`);
             this.cards.push(card);
         }
 
         for (let i = 2; i < 15; i++)
         {
-            let card = new Card("Heart", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_hearts.png`);
+            let card = new Card("Clubs", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_clubs.svg`);
             this.cards.push(card);
         }
 
         for (let i = 2; i < 15; i++)
         {
-            let card = new Card("Diamond", i, `./assets/Playing Cards/Playing Cards (.PNG)/${i}_of_diamonds.png`);
+            let card = new Card("Heart", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_hearts.svg`);
+            this.cards.push(card);
+        }
+
+        for (let i = 2; i < 15; i++)
+        {
+            let card = new Card("Diamond", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_diamonds.svg`);
             this.cards.push(card);
         }
 
