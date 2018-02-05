@@ -1,18 +1,23 @@
 class Deck{
+
+    //creates an array and populates the deck when creating new instance of an object
     constructor(){
         this.cards = [];
         this.populateDeck();
     }
 
+    //add certain cards, probably will not be used anymore
     addCard(card){
         this.cards.push(card);
     }
 
+    //populates the deck with all of the cards
     populateDeck(){
         for(let i=0; i<13; i++){
             let card = new Card("figure1", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
             this.cards.push(card);
         }
+        
         for(let i=0; i<13; i++){
             let card = new Card("figure2", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
             this.cards.push(card);
@@ -25,6 +30,7 @@ class Deck{
             let card = new Card("figure4", i+1, `symbol ${i}`, "/assets/stuffs.stuffs");
             this.cards.push(card);
         }
+        
     }
 
 
@@ -42,11 +48,12 @@ class Deck{
 
     }
 
+    //draws card from the top of the deck and deletes if from it
     drawCard(){
-        let card = a.shift();
+        let card = this.cards.shift();
         return card;
     }
-
+    //idk why, more methods cuz why not, just returns length of array
     numberOfCards(){
         return this.cards.length;
     }
