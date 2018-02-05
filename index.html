@@ -11,9 +11,6 @@
 
     <title>Texas hold'em</title>
 
-    <script src="scripts/card.js"></script>
-    <script src="scripts/deck.js"></script>
-    <script src="scripts/main.js"></script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -21,6 +18,10 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+    
+    <script defer src="scripts/card.js"></script>
+    <script defer src="scripts/deck.js"></script>
+    <script defer src="scripts/main.js"></script>
   </head>
 
   <body>
@@ -54,8 +55,34 @@
         </main>
 
         <!-- Game controls -->
-        <aside class="col-sm-12 col-lg-4 bg-secondary">
-          aside
+        <aside class="col-sm-12 col-lg-4 bg-secondary border-left">
+          <!-- Current player name -->
+          <div class="d-flex justify-content-center">
+            <h2 id="playerName">Player</h2>
+          </div>
+
+          <!-- Cards on hand -->
+          <div class="d-flex justify-content-around">
+            <img id="card1" class="col-sm-6" src="./assets/Playing Cards/Playing Cards (.SVG)/2_of_clubs.svg">
+            <img id="card2" class="col-sm-6" src="./assets/Playing Cards/Playing Cards (.SVG)/4_of_diamonds.svg">
+          </div>
+
+          <div class="mt-2 border-top"></div>
+
+          <!-- Game buttons -->
+          <h4 class="col-sm-12">Test</h4>
+          <div class="col-sm-12">
+            <button id="foldButton" class="btn btn-primary" type="button" name="button">Fold</button>
+            <button id="checkCallButton" class="btn btn-primary" type="button" name="button">Check</button>
+            <button id="raiseButton" class="btn btn-success" type="button" name="button">Raise</button>
+          </div>
+
+          <div class="mt-2 border-top"></div>
+
+          <!-- Statistics -->
+          <h4 class="col-sm-12">Statistics</h4>
+          <p class="col-sm-12">Stake: <span id=stake>5000</span></p>
+
         </aside>
       </div>
     </div>
