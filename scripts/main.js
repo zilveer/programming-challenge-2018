@@ -274,8 +274,10 @@ const scope = {};
     if length>1 split pot
     */
     function checkForWinners() {
+        //loop through all of the players
         for(const player of GAME.players){
             let allCards = [...player.cards, ...GAME.cardsOnTable];
+            //object that golds all of the card combinations
             let cardCombinations = {
                 pairs:[],
                 threes:0,
@@ -290,14 +292,16 @@ const scope = {};
                 straightFlush: 0,
                 flushCards:[]
             };
+            //highest card on hand
             let highest = 0;
             if(player.cards[0].value > player.cards[1].value){
                 highest = player.cards[0].value;
             }else{
                 highest = player.cards[1].value;
             }
-
+            //array with sorted values of cards
             let straights = allCards.map(a=>a.value).sort((a,b)=>a-b);
+            //check for 2,3 and fours
             for(let i=2; i<15; i++){
                 let numOfCards = allCards.filter(card=>card.value==i).length;
                 if(i==14 && numOfCards>0){
@@ -322,13 +326,11 @@ const scope = {};
                     }
                 }
             }
-            
+            //get rid of redundand values in straights
             straights = new Set(straights);
             straights = [...straights];
-            //for(const st of straights){
-                //console.log(st);
-                //}
-                
+
+            //checks for actual straights and then saves the best straight
             for(let i=0; i<straights.length-4; i++){
                 let check = true;
                 for(let j=1; j<5; j++){
@@ -341,19 +343,21 @@ const scope = {};
                     cardCombinations.straight = straights[i];
                 }
             }
-
+            //count all of the figures, to see if u got flush
             Object.keys(cardCombinations.figures).map(figure=>{
                     cardCombinations.figures[figure] = allCards.filter(card=>card.figure == figure).length;
                 }
             );
-
+            //check for straight flushes, checks if there are more then 4 cards of the same figure and only then checks for straight within those cards
             Object.keys(cardCombinations.figures).map(figure=>{
                 if(cardCombinations.figures[figure]>=5){
+                    //cards of only one figure, sorted in ascending order by value
                     let tempDeck = allCards.filter(card=>card.figure == figure).sort((a,b)=>a.value-b.value);
+                    //set property flush cards to tempDeck, not used anymore, too sleepy and hungry to change it now
                     cardCombinations.flushCards = tempDeck;
+                    //get rid of redundant data
                     tempDeck = [...new Set(tempDeck)];
-                    //console.log(tempDeck);
-
+                    //check for the straights (same as before)
                     for(let i=0; i<tempDeck.length-4; i++){
                         let check = true;
                         for(let j=1; j<5; j++){
@@ -371,9 +375,9 @@ const scope = {};
                 };
             });
 
-
+            //set property of cardCombinations to player
             player.cardCombinations = cardCombinations;
-
+            //get best winning condition for certain player
             if(cardCombinations.straightFlush){
                 player.best = {straightFlush: cardCombinations.straightFlush};    
             }else if(cardCombinations.fours.length){
@@ -387,19 +391,22 @@ const scope = {};
             }else if(cardCombinations.threes.length){
                 player.best = {threes: cardCombinations.threes};
             }else if(cardCombinations.pairs.length==2){
-                player.best = {twoPairs: cardCombinations.pairs};
+                player.best = {twoPairs: cardCombinations.pairs, highest:highest};
             }else if(cardCombinations.pairs.length==1){
-                player.best = {pair: cardCombinations.pairs};
+                player.best = {pair: cardCombinations.pairs, highest:highest};
             }else{
                 player.best = {highest:highest};
             }
             
             
         }
+
+        //winning conditions in order from best to worst
         let winningTable = ['straightFlush', 'fours', 'fullHouse', 'flush', 'straight', 'threes', 'twoPairs', 'pair', 'highest'];
         let winners = [];
         let bestWinCondition;
-        
+        //if there's a player with a winning condition, add every player with that condition to the array, then break it
+        //so it doesn't add people with lower win condition to winners table
         for(const winCondition of winningTable){
             let check=false;
             for(const player of GAME.players){
@@ -413,10 +420,12 @@ const scope = {};
                 break;
             }
         }
-
+        //logs all people with the same (and the best) winning condition
         console.log('possible winners', winners);
 
-        
+        //MAGIC
+        //if there's more than one winner, chec if it can be reduced by checking conditions more closely
+        //conditions meet criteria of give pdf, with a few additions of comparing highest card on hand when draw in pair/two pairs/fours/ idk what else
         if(winners.length>1){
             if(bestWinCondition == 'highest'){
                 let best = 0;
@@ -429,16 +438,24 @@ const scope = {};
 
             }else  if(bestWinCondition == 'pair'){
                 let bestPair = 0;
+                let bestCard = 0;
                 for(const player of winners){
                     if(player.best.pair[0]>bestPair){
                         bestPair = player.best.pair[0];
                     }
+                    if(player.best.highest > bestCard){
+                        bestCard = player.best.highest;
+                    }
                 }
                 winners = winners.filter(player=>player.best.pair[0]==bestPair);
+                if(winners.length>1){
+                    winners = winners.filter(player=>player.best.highest == bestCard);
+                }
 
             }else if(bestWinCondition == 'twoPairs'){
                 let highestPair = 0;
                 let lowerHighestPair = 0;
+                let bestCard = 0;                
                 for(const player of winners){
                     if(player.best.twoPairs[0]>lowerHighestPair){
                         lowerHighestPair = player.best.twoPairs[0];
@@ -446,10 +463,16 @@ const scope = {};
                     if(player.best.twoPairs[1]>highestPair){
                         highestPair = player.best.twoPairs[1];
                     }
+                    if(player.best.highest > bestCard){
+                        bestCard = player.best.highest;
+                    }
                 }
                 winners = winners.filter(player=>player.best.twoPairs[1] == highestPair);
                 if(winners.length > 1){
                     winners = winners.filter(player=>player.best.twoPairs[0] == lowerHighestPair);
+                    if(winners.length>1){
+                        winners = winners.filter(player=>player.best.highest == bestCard);
+                    }
                 }
 
             }else if(bestWinCondition == 'threes'){
@@ -520,8 +543,9 @@ const scope = {};
             }
         }
 
-
+        //logs the actual winners or one winner
         console.log("winners",winners);
+        //returns a table of winners
         return winners;
         
     }
