@@ -36,11 +36,6 @@ const scope = {};
         raiseSlider.value = raiseInput.value;
     }
 
-    $('#raiseButton').click(() =>
-    {
-        $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
-    });
-
     // source: https://stackoverflow.com/questions/9894339/disallow-twitter-bootstrap-modal-window-from-closing
     // Load modal
     $('#startGameModal').modal({
@@ -56,32 +51,22 @@ const scope = {};
     const foldButton  = $("#foldButton");
     const raiseButton = $('#raiseButton');
     const checkButton = $('#checkCallButton');
+    scope.players = GAME;
 
     foldButton.on("click", function ()
     {
-        let playerNameHolder = $("#playerName");
+        /* Remove the current player from the array */
+        GAME.players.splice(currentPlayerIndex, 1);
+        console.log(GAME.players);
 
-        /* If current player has already folded */
-        if (GAME.players[currentPlayerIndex].fold)
-        {
-            // alert(GAME.players[currentPlayerIndex].name + " has already folded");
-            playerNameHolder.text(GAME.players[currentPlayerIndex].name + "(FOLDED)");
-        }
-        else
-        {
-            /* Set the fold status of the current player */
-            GAME.players[currentPlayerIndex].fold = true;
-            debugger
+        /* Advance the current player index by 1 if the advanced/next index value is not greater than
+         * the length of the players array. If it is then it sets the current player index to 0.
+         */
+        const nextPlayerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? ++currentPlayerIndex : 0;
 
-            /* Advance the current player index by 1 if the advanced/next index value is not greater than
-             * the length of the players array. If it is then it sets the current player index to 0.
-             */
-            const nextPlayerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? ++currentPlayerIndex : 0;
-
-            /* Move to the next player */
-            setNextPlayer(nextPlayerIndex);
-            console.log(GAME.players);
-        }
+        /* Move to the next player */
+        setNextPlayer(nextPlayerIndex);
+        console.log(GAME.players);
 
         //TODO Remove the cards of the folded player from the deck.
 
@@ -139,46 +124,22 @@ const scope = {};
     {
         let playerNameHolder = $("#playerName");
 
-        /* If the current player has already folded then advance to the next player */
-        if (GAME.players[playerIndex].fold)
+        currentPlayerIndex = playerIndex;
+
+        /* Set the current player index to the current value of the currentPlayerIndex */
+        // GAME.currentPlayer = currentPlayerIndex;
+
+        /* Show the current players name on screen */
+        playerNameHolder.text(GAME.players[currentPlayerIndex].name);
+
+        /* Show the two cards the current player has */
+        for (let i = 0; i < 2; i++)
         {
-            /* Show the current players name on screen */
-            playerNameHolder.text(GAME.players[playerIndex].name + "(FOLDED)");
-
-            /* Advance the current player index if the index will not go over the array.
-             * If the index value will be over the array length then set the index to 0.
-             */
-            currentPlayerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? ++currentPlayerIndex : 0;
-
-            /* Show the two cards the current player has */
-            for (let i = 0; i < 2; i++)
-            {
-                $("#playerCard" + (i + 1)).attr("src", GAME.players[playerIndex].cards[i].imagePath);
-            }
-
-            console.log("Current player index: " + currentPlayerIndex);
-            console.log("Current player name: " + GAME.players[currentPlayerIndex].name);
-            console.log("Current player fold status: " + GAME.players[currentPlayerIndex].fold);
+            $("#playerCard" + (i + 1)).attr("src", GAME.players[playerIndex].cards[i].imagePath);
         }
-        else if (!GAME.players[playerIndex].fold)
-        {
-            currentPlayerIndex = playerIndex;
-
-            /* Set the current player index to the current value of the currentPlayerIndex */
-            // GAME.currentPlayer = currentPlayerIndex;
-
-            /* Show the current players name on screen */
-            playerNameHolder.text(GAME.players[currentPlayerIndex].name);
-
-            /* Show the two cards the current player has */
-            for (let i = 0; i < 2; i++)
-            {
-                $("#playerCard" + (i + 1)).attr("src", GAME.players[playerIndex].cards[i].imagePath);
-            }
-            console.log("Current player index: " + currentPlayerIndex);
-            console.log("Current player name: " + GAME.players[currentPlayerIndex].name);
-            console.log("Current player fold status: " + GAME.players[currentPlayerIndex].fold);
-        }
+        console.log("Current player index: " + currentPlayerIndex);
+        console.log("Current player name: " + GAME.players[currentPlayerIndex].name);
+        console.log("Current player fold status: " + GAME.players[currentPlayerIndex].fold);
     }
 
     /**
