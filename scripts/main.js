@@ -158,11 +158,29 @@ const scope = {};
         /* Create a new player */
         let player = new Player(playerName, stake);
 
+        /* Creates div with player detail in the main tag */
+        createPlayerDiv(player);
+
         /* Give the player two cards */
         player.addCard(deck.drawCard());
         player.addCard(deck.drawCard());
         console.log(player.cards);
         return player;
+    }
 
+    function createPlayerDiv(player)
+    {
+        const name = player.name.replace(" ", "_");
+        const stake = player.stake;
+        const playerDiv = document.createElement('div');
+        playerDiv.className = "col-sm-4";
+        playerDiv.innerHTML = name + " " + stake;
+
+        $('#playerList').append(`
+          <div id='${name}' class='col-sm-4 border border-dark'>
+            <div>Name: ${player.name}<div/>
+            <div>Stake: ${player.stake}<div/>
+          </div>
+          `);
     }
 })(scope, jQuery);
