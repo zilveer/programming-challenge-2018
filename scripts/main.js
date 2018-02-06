@@ -163,11 +163,11 @@ const scope = {};
         $("#playerCard1").attr("src", GAME.players[currentPlayerIndex].cards[0].imagePath);
         $("#playerCard2").attr("src", GAME.players[currentPlayerIndex].cards[1].imagePath);
 
-        for (let i = 0; i < 5; i++) {
-            let cardDrawn = deck.drawCard();
-            cardDrawn.addToTable();
-            GAME.cardsOnTable.push(cardDrawn);
-        }
+        // for (let i = 0; i < 5; i++) {
+        //     let cardDrawn = deck.drawCard();
+        //     cardDrawn.addToTable();
+        //     GAME.cardsOnTable.push(cardDrawn);
+        // }
 
         //console.log(GAME.players);
     }
