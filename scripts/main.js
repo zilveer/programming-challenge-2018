@@ -377,7 +377,7 @@ const scope = {};
             if(cardCombinations.straightFlush){
                 player.best = {straightFlush: cardCombinations.straightFlush};    
             }else if(cardCombinations.fours.length){
-                player.best = {fours: cardCombinations.fours};
+                player.best = {fours: cardCombinations.fours, highest:highest};
             }else if(cardCombinations.threes.length && cardCombinations.pairs.length){
                 player.best = {fullHouse:true, threes: cardCombinations.threes, pair:cardCombinations.pairs.length>1?cardCombinations.pairs[1]:cardCombinations.pair[0]};
             }else if(cardCombinations.flushCards.length){
@@ -494,13 +494,21 @@ const scope = {};
                 }
             }else if(bestWinCondition == 'fours'){
                 let bestFour = 0;
+                let bestCard = 0;
                 for(const player of winners){
                     if(player.best.fours>bestFour){
                         bestFour = player.best.fours;
                     }
+                    if(player.best.highest > bestCard){
+                        bestCard = player.best.highest;
+                    }
                 }
 
                 winners = winners.filter(player=>player.best.fours == bestFour);
+                if(winners.length > 1){
+                    winners = winners.filter(plaer=>player.best.highest == bestCard);
+                }
+
             }else if(bestWinCondition == 'straightFlush'){
                 let bestStraightFlush = 0;
                 for(const player of winners){
