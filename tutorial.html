@@ -16,48 +16,9 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <!--<script defer src="./scripts/player.js"></script>
-    <script defer src="scripts/chip.js"></script>
-    <script defer src="scripts/card.js"></script>
-    <script defer src="scripts/deck.js"></script>
-    <script defer src="scripts/main.js"></script>-->
   </head>
 
   <body>
-    <!-- Modal with fields -->
-    <!--<div class="modal fade" id="startGameModal" tabindex="-1" role="dialog" aria-labelledby="startGameModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="startGameModalLabel">Start new game</h5>
-          </div>
-          <div class="modal-body">
-            <label for="numberOfPlayers">Number of players:</label>
-            <select id="numberOfPlayers" class="custom-select" name="numberOfPlayers">
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-            </select>
-
-            <label for="initalStake">Initial stake:</label>
-            <select id="initalStake" class="custom-select" name="initalStake">
-              <option value="1000">1000</option>
-              <option value="2000">2000</option>
-              <option value="5000">5000</option>
-              <option value="10000">10000</option>
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button id="startButton" type="button" class="btn btn-primary" data-dismiss="modal">Start</button>
-          </div>
-        </div>
-      </div>
-    </div>-->
-
     <!-- Main navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#">Texas hold'em</a>
@@ -89,7 +50,7 @@
             <p>Texas Hold'em is a variation of the popular card game "Poker", This tutorial will learn ya how to play everyone's favouite card game!<br><br>
                 At the beginning of every game, each player is dealt two cards (known as the "Hole Cards"), from here each player either places
                 their Bet, Checks or Folds.<br><br>
-                Once every player has made their choice, the Dealer places three shared cards on the table (the "Flop"), 
+                Once every player has made their choice, the Dealer places three shared cards on the table (the "Flop"),
                 these are for the players to use at the end of the game. Following the initial Flop, players have another opportunity to Check, Raise or Fold;
                 The dealer will add another card to the Flop, changing it to the "Middle". This process is repeated one last time, adding a final card to the middle
                 in order to convert it into the "River".<br><br>
@@ -97,13 +58,13 @@
                 The player with the strongest hands wins the amount of money raised by the players throughout the game.<br></p>
             <h4 class="font-weight-bold">Hand Variations</h4><br>
             <h5 class="font-weight-bold">Highest Card</h5>
-            <p> If no cards in any players hand form a pair AND there are no cards in the River that can provide a better; 
+            <p> If no cards in any players hand form a pair AND there are no cards in the River that can provide a better;
                 The player with highest value card in their hand will win the prize pot.<br><br>
                 Card values for reference (from lowest to highest): 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace.
             </p>
             <h5 class="font-weight-bold">Pair</h5>
             <p>
-                If you hold two cards of equal value, for instance: Two 10 cards, this will count as a pair. 
+                If you hold two cards of equal value, for instance: Two 10 cards, this will count as a pair.
                 Be aware that card value still takes priority in the event of a draw, for example: A pair of Queens will lose to a pair of Kings.
             </p>
             <h5 class="font-weight-bold">Two Pairs</h5>
@@ -121,7 +82,7 @@
             </p>
             <h5 class="font-weight-bold">Flush</h5>
             <p>
-                Having five or more cards of the same suit results in a flush, the order of cards is not important for this hand. 
+                Having five or more cards of the same suit results in a flush, the order of cards is not important for this hand.
                 An example hand would be Five Diamond cards.
             </p>
             <h5 class="font-weight-bold">Full House</h5>
@@ -135,7 +96,7 @@
             <h5 class="font-weight-bold">Straight Flush</h5>
             <p>
                 A combination of the Straight and Flush hands, this involves both cards of the same suit in numerical sequence, For example:
-                2-3-4-5-6 of diamonds. 
+                2-3-4-5-6 of diamonds.
             </p>
             <h5 class="font-weight-bold">Royal Flush</h5>
             <p>
