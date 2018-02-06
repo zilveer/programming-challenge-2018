@@ -21,6 +21,8 @@ class Player
 
         this.check = false;
 
+
+
     }
 
     /* Used to assign this player with a set of cards */
