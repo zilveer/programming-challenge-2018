@@ -9,20 +9,32 @@ const scope = {};
         cardsOnTable: [],
         numberOfPlayers: null,
         players: [],
-        currentPlayer: null
+        currentPlayer: null,
+        bigBlind: 200,
+        smallBlind: bigBlind/2
     };
+
     let currentPlayerIndex = 0;
     let deck;
 
-    // for (let i = 0; i < 5; i++) {
-    //     let cardDrawn = deck.drawCard();
-    //     cardDrawn.addToTable();
-    //     GAME.cardsOnTable.push(cardDrawn);
-    // }
-
     // Raise amount input and slider
-    const raiseInput    = document.getElementById('raiseInput');
-    const raiseSlider   = document.getElementById('raiseSlider');
+    const raiseInput    = $("#raiseInput");
+    const raiseSlider   = $("#raiseSlider");
+
+    const foldButton  = $("#foldButton");
+    const raiseButton = $("#raiseButton");
+    const checkButton = $("#checkCallButton");
+    const startButton = $('#startButton');
+
+    startButton.click(startGame);
+
+    // source: https://stackoverflow.com/questions/9894339/disallow-twitter-bootstrap-modal-window-from-closing
+    // Load modal
+    $('#startGameModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+
     raiseSlider.oninput = () =>
     {
         raiseInput.value = raiseSlider.value;
@@ -36,28 +48,7 @@ const scope = {};
         raiseSlider.value = raiseInput.value;
     }
 
-    $('#raiseButton').click(() =>
-    {
-        $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
-    });
-
-    // source: https://stackoverflow.com/questions/9894339/disallow-twitter-bootstrap-modal-window-from-closing
-    // Load modal
-    $('#startGameModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-
-    // Button that starts the game
-    const startButton = document.getElementById('startButton');
-
-    startButton.addEventListener('click', startGame);
-
-    const foldButton  = $("#foldButton");
-    const raiseButton = $('#raiseButton');
-    const checkButton = $('#checkCallButton');
-
-    foldButton.on("click", function ()
+    foldButton.click(() =>
     {
         let playerNameHolder = $("#playerName");
 
@@ -71,7 +62,6 @@ const scope = {};
         {
             /* Set the fold status of the current player */
             GAME.players[currentPlayerIndex].fold = true;
-            debugger
 
             /* Advance the current player index by 1 if the advanced/next index value is not greater than
              * the length of the players array. If it is then it sets the current player index to 0.
@@ -87,7 +77,7 @@ const scope = {};
 
     });
 
-    checkButton.on("click", function ()
+    checkButton.click(() =>
     {
         /* Advance the current player index by 1 if the advanced/next index value is not greater than
          * the length of the players array. If it is then it sets the current player index to 0.
@@ -103,8 +93,7 @@ const scope = {};
     {
         $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
 
-        const nextPlayerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
-        setNextPlayer(nextPlayerIndex);
+        setNextPlayer();
         // console.log("Next player: " + nextPlayerIndex);
     });
 
@@ -129,15 +118,20 @@ const scope = {};
     function setCurrentPlayer(playerIndex)
     {
         let playerNameHolder = $("#playerName");
+        let playerStakeHolder = $("#playerStake");
         currentPlayerIndex   = (playerIndex < GAME.players.length) ? playerIndex : 0;
 
         /* Show the current players name on screen */
         playerNameHolder.text(GAME.players[currentPlayerIndex].name);
+
+        /* Show the current players stake on the screen */
+        playerStakeHolder.text(GAME.players[currentPlayerIndex].stake);
     }
 
-    function setNextPlayer(playerIndex)
+    function setNextPlayer()
     {
         let playerNameHolder = $("#playerName");
+        const playerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
 
         /* If the current player has already folded then advance to the next player */
         if (GAME.players[playerIndex].fold)
@@ -155,12 +149,8 @@ const scope = {};
             {
                 $("#playerCard" + (i + 1)).attr("src", GAME.players[playerIndex].cards[i].imagePath);
             }
-
-            console.log("Current player index: " + currentPlayerIndex);
-            console.log("Current player name: " + GAME.players[currentPlayerIndex].name);
-            console.log("Current player fold status: " + GAME.players[currentPlayerIndex].fold);
         }
-        else if (!GAME.players[playerIndex].fold)
+        else
         {
             currentPlayerIndex = playerIndex;
 
@@ -175,10 +165,11 @@ const scope = {};
             {
                 $("#playerCard" + (i + 1)).attr("src", GAME.players[playerIndex].cards[i].imagePath);
             }
-            console.log("Current player index: " + currentPlayerIndex);
-            console.log("Current player name: " + GAME.players[currentPlayerIndex].name);
-            console.log("Current player fold status: " + GAME.players[currentPlayerIndex].fold);
         }
+
+        console.log("Current player index: " + currentPlayerIndex);
+        console.log("Current player name: " + GAME.players[currentPlayerIndex].name);
+        console.log("Current player fold status: " + GAME.players[currentPlayerIndex].fold);
     }
 
     /**

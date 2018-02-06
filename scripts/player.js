@@ -14,6 +14,9 @@ class Player
         /* Used to determine if a player has folded */
         this.fold = false;
 
+        /* Used to determine role of the player */
+        this.role = null;
+
     }
 
     /* Used to assign this player with a set of cards */
