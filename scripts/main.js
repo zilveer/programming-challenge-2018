@@ -86,9 +86,7 @@ const scope = {};
 
         if (GAME.players[currentPlayerIndex].betAmount < currentHighestBet)
         {
-            // Then CALL
-            console.log("CALL");
-
+            // Then call
             /* Make the player match the current highest bet */
             GAME.players[currentPlayerIndex].betAmount = parseInt(currentHighestBet);
 
@@ -98,9 +96,7 @@ const scope = {};
 
         else if (GAME.players[currentPlayerIndex].betAmount === currentHighestBet)
         {
-            // Then CHECK
-            console.log("CHECK");
-
+            // Then check
             GAME.players[currentPlayerIndex].check = true;
 
             /* Move to the next player */
@@ -122,7 +118,7 @@ const scope = {};
         console.log(GAME.foldedPlayers);
     });
 
-    /* Raise the bet amount by the minimum value needed to match the current highest player bet */
+    /* Raise the bet amount by the value in the raiseInput text field */
     raiseButton.click(() =>
     {
         let currentHighestBet           = getHighestPlayerBet();
@@ -153,6 +149,8 @@ const scope = {};
         /* Show the pot amount on screen */
         pot.text(GAME.pot);
 
+        GAME.players[currentPlayerIndex].stake -= parseInt(GAME.pot + parseInt(raiseInput.val()) );
+        GAME.players[currentPlayerIndex].betAmount = parseInt(GAME.pot);
         setNextPlayer();
 
         console.log(GAME.players);
@@ -179,11 +177,19 @@ const scope = {};
         /* Make the third player the current player */
         setCurrentPlayer(2);
 
+
+
         /* Show the card image for the 2 cards the first player has*/
         $("#playerCard1").attr("src", GAME.players[currentPlayerIndex].cards[0].imagePath);
         $("#playerCard2").attr("src", GAME.players[currentPlayerIndex].cards[1].imagePath);
 
-        console.log(GAME.players);
+        // for (let i = 0; i < 5; i++) {
+        //     let cardDrawn = deck.drawCard();
+        //     cardDrawn.addToTable();
+        //     GAME.cardsOnTable.push(cardDrawn);
+        // }
+
+        //console.log(GAME.players);
     }
 
     /**
@@ -198,10 +204,12 @@ const scope = {};
         GAME.players[1].betAmount = parseInt(GAME.bigBlind);
     }
 
+
     function setCurrentPlayer(playerIndex)
     {
         let playerNameHolder  = $("#playerName");
         let playerStakeHolder = $("#playerStake");
+        let playerBetHolder = $("#bet");
         currentPlayerIndex    = (playerIndex < GAME.players.length) ? playerIndex : 0;
 
         /* Show the current players name on screen */
@@ -209,11 +217,17 @@ const scope = {};
 
         /* Show the current players stake on the screen */
         playerStakeHolder.text(GAME.players[currentPlayerIndex].stake);
+        /* Show the current players stake on screen */
+        playerBetHolder.text(GAME.players[currentPlayerIndex].betAmount);
     }
 
     function setNextPlayer()
     {
         let playerNameHolder = $("#playerName");
+        let playerStakeHolder = $("#playerStake");
+        let playerBetHolder = $("#bet");
+        let playerId = GAME.players[currentPlayerIndex].name.replace(" ", "_");
+        let lastPlayerCard = $(`#${playerId}`);
         const playerIndex    = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
 
         currentPlayerIndex = playerIndex;
@@ -223,6 +237,16 @@ const scope = {};
 
         /* Show the current players name on screen */
         playerNameHolder.text(GAME.players[currentPlayerIndex].name);
+        /* Show the current players stake on screen */
+        playerStakeHolder.text(GAME.players[currentPlayerIndex].stake);
+        /* Show the current players stake on screen */
+        playerBetHolder.text(GAME.players[currentPlayerIndex].betAmount);
+
+        let previousPlayer = currentPlayerIndex-1;
+        if (previousPlayer < 0) {
+          previousPlayer = GAME.players.length -1;
+        }
+        lastPlayerCard.find(".bet").text(GAME.players[previousPlayer].betAmount);
 
         /* Show the two cards the current player has */
         for (let i = 0; i < 2; i++)
@@ -287,7 +311,267 @@ const scope = {};
           <div id='${name}' class='col-sm-4 border border-dark'>
             <div>Name: ${player.name}<div/>
             <div>Stake: ${player.stake}<div/>
+            <div>Bet: <span class="bet">${player.betAmount}</span><div/>
           </div>
           `);
     }
-})(scope, jQuery);
+
+
+    /*
+    returns [] of winners
+    if length>1 split pot
+    */
+    function checkForWinners() {
+        for(const player of GAME.players){
+            let allCards = [...player.cards, ...GAME.cardsOnTable];
+            let cardCombinations = {
+                pairs:[],
+                threes:0,
+                fours:0,
+                straight:null,
+                figures:{
+                    Diamonds: 0,
+                    Clubs: 0,
+                    Spades: 0,
+                    Hearts:0
+                },
+                straightFlush: 0,
+                flushCards:[]
+            };
+            let highest = 0;
+            if(player.cards[0].value > player.cards[1].value){
+                highest = player.cards[0].value;
+            }else{
+                highest = player.cards[1].value;
+            }
+
+            let straights = allCards.map(a=>a.value).sort((a,b)=>a-b);
+            for(let i=2; i<15; i++){
+                let numOfCards = allCards.filter(card=>card.value==i).length;
+                if(i==14 && numOfCards>0){
+                    straights.unshift(1);
+                }
+
+                switch(numOfCards){
+                    case 0: break;
+                    case 1: break;
+                    case 2: {
+                        cardCombinations.pairs.push(i);
+                        if(cardCombinations.pairs.length > 2) cardCombinations.pairs.shift();
+                        break;
+                    }
+                    case 3: {
+                        cardCombinations.threes=i;
+                        break;
+                    }
+                    case 4: {
+                        cardCombinations.fours=i;
+                        break;
+                    }
+                }
+            }
+
+            straights = new Set(straights);
+            straights = [...straights];
+            //for(const st of straights){
+                //console.log(st);
+                //}
+
+            for(let i=0; i<straights.length-4; i++){
+                let check = true;
+                for(let j=1; j<5; j++){
+                    if(straights[j + i] != straights[j + i - 1] + 1){
+                        check=false;
+                        break;
+                    }
+                }
+                if(check){
+                    cardCombinations.straight = straights[i];
+                }
+            }
+
+            Object.keys(cardCombinations.figures).map(figure=>{
+                    cardCombinations.figures[figure] = allCards.filter(card=>card.figure == figure).length;
+                }
+            );
+
+            Object.keys(cardCombinations.figures).map(figure=>{
+                if(cardCombinations.figures[figure]>=5){
+                    let tempDeck = allCards.filter(card=>card.figure == figure).sort((a,b)=>a.value-b.value);
+                    cardCombinations.flushCards = tempDeck;
+                    tempDeck = [...new Set(tempDeck)];
+                    //console.log(tempDeck);
+
+                    for(let i=0; i<tempDeck.length-4; i++){
+                        let check = true;
+                        for(let j=1; j<5; j++){
+                            if(tempDeck[j + i].value != tempDeck[j + i - 1].value + 1){
+                                check=false;
+                                break;
+                            }
+                        }
+                        if(check){
+                            cardCombinations.straightFlush = tempDeck[i].value;
+                        }
+                    }
+
+
+                }
+            });
+
+
+            player.cardCombinations = cardCombinations;
+
+            if(cardCombinations.straightFlush){
+                player.best = {straightFlush: cardCombinations.straightFlush};
+            }else if(cardCombinations.fours.length){
+                player.best = {fours: cardCombinations.fours, highest:highest};
+            }else if(cardCombinations.threes.length && cardCombinations.pairs.length){
+                player.best = {fullHouse:true, threes: cardCombinations.threes, pair:cardCombinations.pairs.length>1?cardCombinations.pairs[1]:cardCombinations.pair[0]};
+            }else if(cardCombinations.flushCards.length){
+                player.best = {flush: cardCombinations.flushCards, highest:highest};
+            }else if(cardCombinations.straight){
+                player.best = {straight: cardCombinations.straight};
+            }else if(cardCombinations.threes.length){
+                player.best = {threes: cardCombinations.threes};
+            }else if(cardCombinations.pairs.length==2){
+                player.best = {twoPairs: cardCombinations.pairs};
+            }else if(cardCombinations.pairs.length==1){
+                player.best = {pair: cardCombinations.pairs};
+            }else{
+                player.best = {highest:highest};
+            }
+
+
+        }
+        let winningTable = ['straightFlush', 'fours', 'fullHouse', 'flush', 'straight', 'threes', 'twoPairs', 'pair', 'highest'];
+        let winners = [];
+        let bestWinCondition;
+
+        for(const winCondition of winningTable){
+            let check=false;
+            for(const player of GAME.players){
+                if(player.best[winCondition] !== undefined){
+                    check=true;
+                    winners.push(player);
+                }
+            }
+            if(check){
+                bestWinCondition = winCondition;
+                break;
+            }
+        }
+
+        console.log('possible winners', winners);
+
+
+        if(winners.length>1){
+            if(bestWinCondition == 'highest'){
+                let best = 0;
+                for(const player of winners){
+                    if(player.best.highest>best){
+                        best = player.best.highest;
+                    }
+                }
+                winners = winners.filter(player=>player.best.highest == best);
+
+            }else  if(bestWinCondition == 'pair'){
+                let bestPair = 0;
+                for(const player of winners){
+                    if(player.best.pair[0]>bestPair){
+                        bestPair = player.best.pair[0];
+                    }
+                }
+                winners = winners.filter(player=>player.best.pair[0]==bestPair);
+
+            }else if(bestWinCondition == 'twoPairs'){
+                let highestPair = 0;
+                let lowerHighestPair = 0;
+                for(const player of winners){
+                    if(player.best.twoPairs[0]>lowerHighestPair){
+                        lowerHighestPair = player.best.twoPairs[0];
+                    }
+                    if(player.best.twoPairs[1]>highestPair){
+                        highestPair = player.best.twoPairs[1];
+                    }
+                }
+                winners = winners.filter(player=>player.best.twoPairs[1] == highestPair);
+                if(winners.length > 1){
+                    winners = winners.filter(player=>player.best.twoPairs[0] == lowerHighestPair);
+                }
+
+            }else if(bestWinCondition == 'threes'){
+                let bestThree = 0;
+                for(const player of winners){
+                    if(player.best.threes > bestThree){
+                        bestThree = player.best.threes;
+                    }
+                }
+                winners = winners.filter(player=>player.best.threes = bestThree);
+            }else if(bestWinCondition == 'straight'){
+                let bestStraight = 0;
+                for(const player of winners){
+                    if(player.best.straight > bestStraight){
+                        bestStraight = player.best.straight;
+                    }
+                    winners = winners.filter(player=>player.best.straight == bestStraight);
+                }
+            }else if(bestWinCondition == 'flush'){
+                let highestCard = 0;
+                for(const player of winners){
+                    if(player.best.highest > highestCard){
+                        highestCard = playe.best.highest;
+                    }
+                }
+                winners = winners.filter(player=>player.best.highest == highestCard);
+            }else if(bestWinCondition == 'fullHouse'){
+                let highestThrees = 0;
+                let highestPair = 0;
+                for(const player of winners){
+                    if(player.best.threes > highestThrees){
+                        highestThrees = player.best.threes;
+                    }
+                    if(player.best.pair>highestPair){
+                        highestPair = player.best.pair;
+                    }
+                }
+
+                winners = winners.filter(player=>player.best.threes == highestThrees);
+                if(winners.length > 1){
+                    winners = winners.filter(player=>player.best.pair == highestPair);
+                }
+            }else if(bestWinCondition == 'fours'){
+                let bestFour = 0;
+                let bestCard = 0;
+                for(const player of winners){
+                    if(player.best.fours>bestFour){
+                        bestFour = player.best.fours;
+                    }
+                    if(player.best.highest > bestCard){
+                        bestCard = player.best.highest;
+                    }
+                }
+
+                winners = winners.filter(player=>player.best.fours == bestFour);
+                if(winners.length > 1){
+                    winners = winners.filter(plaer=>player.best.highest == bestCard);
+                }
+
+            }else if(bestWinCondition == 'straightFlush'){
+                let bestStraightFlush = 0;
+                for(const player of winners){
+                    if(player.best.straightFlush > bestStraightFlush){
+                        bestStraightFlush = player.best.straightFlush;
+                    }
+                }
+                winners = winners.filter(player=>player.best.straightFlush == bestStraightFlush);
+            }
+        }
+
+
+        console.log("winners",winners);
+        return winners;
+
+    }
+
+    })(scope, jQuery);
