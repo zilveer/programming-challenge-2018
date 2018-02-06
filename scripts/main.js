@@ -4,22 +4,28 @@ const scope = {};
 {
     //let scope.smth will create "public" variable accessible by scope.smth
     //let smth will create local variable not accessible in console
-    const GAME             = {
+    const GAME = {
         pot: 0,
         cardsOnTable: [],
         numberOfPlayers: null,
         players: [],
         currentPlayer: null,
         bigBlind: 200,
-        smallBlind: bigBlind/2
+        smallBlind: null,
+        winningPlayer: null,
+        foldedPlayers: []
     };
+    GAME.smallBlind = GAME.bigBlind / 2;
+    const pot = $("#pot");
+
+    scope.thing = GAME;
 
     let currentPlayerIndex = 0;
     let deck;
 
     // Raise amount input and slider
-    const raiseInput    = $("#raiseInput");
-    const raiseSlider   = $("#raiseSlider");
+    const raiseInput  = $("#raiseInput");
+    const raiseSlider = $("#raiseSlider");
 
     const foldButton  = $("#foldButton");
     const raiseButton = $("#raiseButton");
@@ -37,23 +43,28 @@ const scope = {};
 
     scope.players = GAME;
 
-    raiseSlider.oninput = () =>
+    raiseSlider.change(() =>
     {
-        raiseInput.value = raiseSlider.value;
-    }
+        raiseInput.val(raiseSlider.val());
+    });
 
-    raiseInput.onchange = () =>
+    raiseInput.change = () =>
     {
         /* magic that should not be used in real thingy, but i like it c:
          sets max value to 100 and min to 1 */
-        raiseInput.value  = Math.min(Math.max(raiseInput.value, 1), 100);
-        raiseSlider.value = raiseInput.value;
-    }
+        raiseInput.val(Math.min(Math.max(raiseInput.val(), 1), 100));
+        raiseSlider.val(raiseInput.val());
+        console.log(raiseInput.val());
+    };
 
     foldButton.click(() =>
     {
-        /* Remove the current player from the array */
+        /* Add the folded player to the array of currently folded players */
+        GAME.foldedPlayers.push(GAME.players[currentPlayerIndex]);
+
+        /* Remove the current player from the players array */
         GAME.players.splice(currentPlayerIndex, 1);
+
         console.log(GAME.players);
 
         /* Advance the current player index by 1 if the advanced/next index value is not greater than
@@ -65,28 +76,65 @@ const scope = {};
         setNextPlayer(nextPlayerIndex);
         console.log(GAME.players);
 
-        //TODO Remove the cards of the folded player from the deck.
-
     });
 
+    /* Check matches the last bet */
     checkButton.click(() =>
     {
+        let currentHighestBet = 0;
+
+
+        /* loop though players to get the highest be amount */
+        for (let i=0; i<GAME.players.length; i++)
+        {
+            if(GAME.players[i].betAmount >= currentHighestBet)
+            {
+                currentHighestBet = GAME.players[i].betAmount;
+            }
+        }
+
+
+        if(GAME.players[currentPlayerIndex].betAmount < currentHighestBet)
+        {
+            // Then call
+            /* Make the player match the current highest bet */
+            GAME.players[currentPlayerIndex].betAmount = parseInt(currentHighestBet);
+            /* Move to the next player */
+            setNextPlayer();
+        }
+
+        if(GAME.players[currentPlayerIndex].betAmount === currentHighestBet)
+        {
+            // Then check
+            GAME.players[currentPlayerIndex].check = true;
+            /* Move to the next player */
+            setNextPlayer();
+        }
+
+
+        /* Make the player match the bet/money in the pot */
+        // GAME.players[currentPlayerIndex].betAmount = parseInt(GAME.pot);
+
         /* Advance the current player index by 1 if the advanced/next index value is not greater than
          * the length of the players array. If it is then it sets the current player index to 0.
          */
         const nextPlayerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
 
-        /* Move to the next player */
-        setNextPlayer();
+        // /* Move to the next player */
+        // setNextPlayer();
         console.log(GAME.players);
+        console.log(GAME.foldedPlayers);
     });
 
+    /* Raise the bet amount by the value in the raiseInput text field */
     raiseButton.click(() =>
     {
-        $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
+        /* Raise the pot amount by the amount specified in the raiseInput input field */
+        GAME.pot += parseInt(GAME.pot + parseInt(raiseInput.val()) );
+        pot.text(GAME.pot);
 
+        GAME.players[currentPlayerIndex].betAmount = parseInt(GAME.pot);
         setNextPlayer();
-        // console.log("Next player: " + nextPlayerIndex);
     });
 
     function startGame()
@@ -96,13 +144,20 @@ const scope = {};
         const initialStake   = document.getElementById('initalStake').value;
 
         /* Put each player inside an array */
-        for (var i = 0; i < GAME.numberOfPlayers; i++)
+        for (let i = 0; i < GAME.numberOfPlayers; i++)
         {
-            GAME.players.push(setupPlayer("Bob " + (i + 1), initialStake));
+            GAME.players.push(setupPlayer("Player " + (i + 1), initialStake));
         }
 
-        /* Make the first player the current player */
-        setCurrentPlayer(currentPlayerIndex);
+        allocateBlindRoles();
+
+        GAME.pot = GAME.bigBlind + GAME.smallBlind;
+        pot.text(GAME.pot);
+
+        /* Make the third player the current player */
+        setCurrentPlayer(2);
+
+
 
         /* Show the card image for the 2 cards the first player has*/
         $("#playerCard1").attr("src", GAME.players[currentPlayerIndex].cards[0].imagePath);
@@ -111,11 +166,21 @@ const scope = {};
         console.log(GAME.players);
     }
 
+    function allocateBlindRoles()
+    {
+        GAME.players[0].role = "SMALL BLIND";
+        GAME.players[0].betAmount = parseInt(GAME.smallBlind);
+
+        GAME.players[1].role = "BIG BLIND";
+        GAME.players[1].betAmount = parseInt(GAME.bigBlind);
+    }
+
+
     function setCurrentPlayer(playerIndex)
     {
-        let playerNameHolder = $("#playerName");
+        let playerNameHolder  = $("#playerName");
         let playerStakeHolder = $("#playerStake");
-        currentPlayerIndex   = (playerIndex < GAME.players.length) ? playerIndex : 0;
+        currentPlayerIndex    = (playerIndex < GAME.players.length) ? playerIndex : 0;
 
         /* Show the current players name on screen */
         playerNameHolder.text(GAME.players[currentPlayerIndex].name);
@@ -127,7 +192,7 @@ const scope = {};
     function setNextPlayer()
     {
         let playerNameHolder = $("#playerName");
-        const playerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
+        const playerIndex    = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
 
         currentPlayerIndex = playerIndex;
 
