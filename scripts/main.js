@@ -212,108 +212,133 @@ const scope = {};
     }
 
     scope.checkCards = () => {
-        let player = GAME.players[currentPlayerIndex];
-        let allCards = [...player.cards, ...GAME.cardsOnTable];
-        let cardCombinations = {
-            pairs:[],
-            threes:[],
-            fours:[],
-            straight:null,
-            figures:{
-                Diamonds: 0,
-                Clubs: 0,
-                Spades: 0,
-                Hearts:0
-            },
-            straightFlush: 0,
-            flushCards:[],
-            highest: 0
-        };
-
-        if(player.cards[0].value > player.cards[1].value){
-            cardCombinations.highest = player.cards[0].value;
-        }else{
-            cardCombinations.highest = player.cards[1].value;
-        }
-
-        let straights = allCards.map(a=>a.value).sort((a,b)=>a-b);
-        for(let i=2; i<15; i++){
-            let numOfCards = allCards.filter(card=>card.value==i).length;
-            if(i==14 && numOfCards>0){
-                straights.unshift(1);
+        for(const player of GAME.players){
+            let allCards = [...player.cards, ...GAME.cardsOnTable];
+            let cardCombinations = {
+                pairs:[],
+                threes:[],
+                fours:[],
+                straight:null,
+                figures:{
+                    Diamonds: 0,
+                    Clubs: 0,
+                    Spades: 0,
+                    Hearts:0
+                },
+                straightFlush: 0,
+                flushCards:[]
+            };
+            let highest = 0;
+            if(player.cards[0].value > player.cards[1].value){
+                highest = player.cards[0].value;
+            }else{
+                highest = player.cards[1].value;
             }
 
-            switch(numOfCards){
-                case 0: break;
-                case 1: break;
-                case 2: {
-                    cardCombinations.pairs.push(i);
-                    if(cardCombinations.pairs.length > 2) cardCombinations.pairs.shift();
-                    break;
+            let straights = allCards.map(a=>a.value).sort((a,b)=>a-b);
+            for(let i=2; i<15; i++){
+                let numOfCards = allCards.filter(card=>card.value==i).length;
+                if(i==14 && numOfCards>0){
+                    straights.unshift(1);
                 }
-                case 3: {
-                    cardCombinations.threes.push(i);
-                    break;
-                }
-                case 4: {
-                    cardCombinations.fours.push(i);
-                    break;
+
+                switch(numOfCards){
+                    case 0: break;
+                    case 1: break;
+                    case 2: {
+                        cardCombinations.pairs.push(i);
+                        if(cardCombinations.pairs.length > 2) cardCombinations.pairs.shift();
+                        break;
+                    }
+                    case 3: {
+                        cardCombinations.threes.push(i);
+                        break;
+                    }
+                    case 4: {
+                        cardCombinations.fours.push(i);
+                        break;
+                    }
                 }
             }
-        }
-        
-        straights = new Set(straights);
-        straights = [...straights];
-        //for(const st of straights){
-            //console.log(st);
-            //}
             
-        for(let i=0; i<straights.length-4; i++){
-            let check = true;
-            for(let j=1; j<5; j++){
-                if(straights[j + i] != straights[j + i - 1] + 1){
-                    check=false;
-                    break;
+            straights = new Set(straights);
+            straights = [...straights];
+            //for(const st of straights){
+                //console.log(st);
+                //}
+                
+            for(let i=0; i<straights.length-4; i++){
+                let check = true;
+                for(let j=1; j<5; j++){
+                    if(straights[j + i] != straights[j + i - 1] + 1){
+                        check=false;
+                        break;
+                    }
+                }
+                if(check){
+                    cardCombinations.straight = straights[i];
                 }
             }
-            if(check){
-                cardCombinations.straight = straights[i];
-            }
-        }
 
-        Object.keys(cardCombinations.figures).map(figure=>{
-                cardCombinations.figures[figure] = allCards.filter(card=>card.figure == figure).length;
-            }
-        );
+            Object.keys(cardCombinations.figures).map(figure=>{
+                    cardCombinations.figures[figure] = allCards.filter(card=>card.figure == figure).length;
+                }
+            );
 
-        Object.keys(cardCombinations.figures).map(figure=>{
-            if(cardCombinations.figures[figure]>=5){
-                let tempDeck = allCards.filter(card=>card.figure == figure).sort((a,b)=>a.value-b.value);
-                cardCombinations.flushCards = tempDeck;
-                tempDeck = [...new Set(tempDeck)];
-                console.log(tempDeck);
+            Object.keys(cardCombinations.figures).map(figure=>{
+                if(cardCombinations.figures[figure]>=5){
+                    let tempDeck = allCards.filter(card=>card.figure == figure).sort((a,b)=>a.value-b.value);
+                    cardCombinations.flushCards = tempDeck;
+                    tempDeck = [...new Set(tempDeck)];
+                    console.log(tempDeck);
 
-                for(let i=0; i<tempDeck.length-4; i++){
-                    let check = true;
-                    for(let j=1; j<5; j++){
-                        if(tempDeck[j + i].value != tempDeck[j + i - 1].value + 1){
-                            check=false;
-                            break;
+                    for(let i=0; i<tempDeck.length-4; i++){
+                        let check = true;
+                        for(let j=1; j<5; j++){
+                            if(tempDeck[j + i].value != tempDeck[j + i - 1].value + 1){
+                                check=false;
+                                break;
+                            }
+                        }
+                        if(check){
+                            cardCombinations.straightFlush = tempDeck[i].value;
                         }
                     }
-                    if(check){
-                        cardCombinations.straightFlush = tempDeck[i].value;
-                    }
-                }
+            
+
+                };
+            });
+
+
+            player.cardCombinations = cardCombinations;
+
+            if(cardCombinations.straightFlush){
+                player.best = {straightFlush: cardCombinations.straightFlush};    
+            }else if(cardCombinations.fours.length){
+                player.best = {fours: cardCombinations.fours, kickers: player.cards};
+            }else if(cardCombinations.threes.length && cardCombinations.pairs.length){
+                player.best = {threes: cardCombinations.threes, pairs:cardCombinations.pairs};
+            }else if(cardCombinations.flushCards.length){
+                player.best = {flush: cardCombinations.flushCards};
+            }else if(cardCombinations.straight){
+                player.bext = {straight: cardCombinations.straight};
+            }else if(cardCombinations.threes.length){
+                player.best = {threes: cardCombinations.threes, kickers:player.cards};
+            }else if(cardCombinations.pairs.length==2){
+                player.best = {twoPairs: cardCombinations.pairs, kickers:player.cards};
+            }else if(cardCombinations.pairs.length==1){
+                player.best = {pair: cardCombinations.pairs};
+            }else{
+                player.best = {highest:highest};
+            }
+            
+            
+        }
+        let winners = [];
+        for (const player of GAME.players){
+            console.log(player.best);
+        }
         
-
-            };
-        });
-
-
-        console.log(cardCombinations);
-
-
     }
         
     })(scope, jQuery);
