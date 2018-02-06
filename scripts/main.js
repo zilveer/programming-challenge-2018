@@ -77,7 +77,7 @@ const scope = {};
         const nextPlayerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
 
         /* Move to the next player */
-        setNextPlayer(nextPlayerIndex);
+        setNextPlayer();
         console.log(GAME.players);
     });
 
@@ -102,7 +102,11 @@ const scope = {};
         }
 
         /* Make the first player the current player */
-        setCurrentPlayer(0);
+        setCurrentPlayer(currentPlayerIndex);
+
+        /* Show the card image for the 2 cards the first player has*/
+        $("#playerCard1").attr("src", GAME.players[currentPlayerIndex].cards[0].imagePath);
+        $("#playerCard2").attr("src", GAME.players[currentPlayerIndex].cards[1].imagePath);
 
         console.log(GAME.players);
     }
@@ -155,18 +159,9 @@ const scope = {};
         let player = new Player(playerName, stake);
 
         /* Give the player two cards */
-        for (let i = 0; i < 2; i++)
-        {
-            /* Draw a card from the deck and hand it to the player */
-            player.addCard(deck.drawCard());
-        }
-
-        /* Show the card image for the 2 cards */
-        for (let i = 0; i < 2; i++)
-        {
-            $("#playerCard" + (i + 1)).attr("src", player.cards[i].imagePath);
-        }
-
+        player.addCard(deck.drawCard());
+        player.addCard(deck.drawCard());
+        console.log(player.cards);
         return player;
 
     }
