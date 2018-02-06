@@ -21,24 +21,20 @@ const scope = {};
     // }
 
     // Raise amount input and slider
-    const raiseInput    = document.getElementById('raiseInput');
-    const raiseSlider   = document.getElementById('raiseSlider');
-    raiseSlider.oninput = () =>
+    const raiseInput    = $('#raiseInput');
+    const raiseSlider   = $('#raiseSlider');
+    raiseSlider.change(()=>
     {
-        raiseInput.value = raiseSlider.value;
-    }
+        raiseInput.val(raiseSlider.val());
+    });
 
-    raiseInput.onchange = () =>
+    raiseInput.change(()=>
     {
         /* magic that should not be used in real thingy, but i like it c:
          sets max value to 100 and min to 1 */
-        raiseInput.value  = Math.min(Math.max(raiseInput.value, 1), 100);
-        raiseSlider.value = raiseInput.value;
-    }
-
-    $('#raiseButton').click(() =>
-    {
-        $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
+         console.log(2);
+        raiseInput.val(Math.min(Math.max(raiseInput.val()|0, 1), 100));
+        raiseSlider.va(raiseInput.val());
     });
 
     // source: https://stackoverflow.com/questions/9894339/disallow-twitter-bootstrap-modal-window-from-closing
@@ -99,8 +95,8 @@ const scope = {};
         console.log(GAME.players);
     });
 
-    raiseButton.click(() =>
-    {
+    raiseButton.click(() =>{
+
         $('#pot').html(parseInt($('#pot').html()) + parseInt(raiseInput.value));
 
         const nextPlayerIndex = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
@@ -122,6 +118,12 @@ const scope = {};
 
         /* Make the first player the current player */
         setCurrentPlayer(0);
+
+        for (let i = 0; i < 5; i++) {
+            let cardDrawn = deck.drawCard();
+            cardDrawn.addToTable();
+            GAME.cardsOnTable.push(cardDrawn);
+        }
 
         console.log(GAME.players);
     }
@@ -208,4 +210,111 @@ const scope = {};
         return player;
 
     }
-})(scope, jQuery);
+
+    scope.checkCards = () => {
+        let player = GAME.players[currentPlayerIndex];
+        let allCards = [...player.cards, ...GAME.cardsOnTable];
+        let cardCombinations = {
+            pairs:[],
+            threes:[],
+            fours:[],
+            straight:null,
+            figures:{
+                Diamonds: 0,
+                Clubs: 0,
+                Spades: 0,
+                Hearts:0
+            },
+            straightFlush: 0,
+            flushCards:[],
+            highest: 0
+        };
+
+        if(player.cards[0].value > player.cards[1].value){
+            cardCombinations.highest = player.cards[0].value;
+        }else{
+            cardCombinations.highest = player.cards[1].value;
+        }
+
+        let straights = allCards.map(a=>a.value).sort((a,b)=>a-b);
+        for(let i=2; i<15; i++){
+            let numOfCards = allCards.filter(card=>card.value==i).length;
+            if(i==14 && numOfCards>0){
+                straights.unshift(1);
+            }
+
+            switch(numOfCards){
+                case 0: break;
+                case 1: break;
+                case 2: {
+                    cardCombinations.pairs.push(i);
+                    if(cardCombinations.pairs.length > 2) cardCombinations.pairs.shift();
+                    break;
+                }
+                case 3: {
+                    cardCombinations.threes.push(i);
+                    break;
+                }
+                case 4: {
+                    cardCombinations.fours.push(i);
+                    break;
+                }
+            }
+        }
+        
+        straights = new Set(straights);
+        straights = [...straights];
+        //for(const st of straights){
+            //console.log(st);
+            //}
+            
+        for(let i=0; i<straights.length-4; i++){
+            let check = true;
+            for(let j=1; j<5; j++){
+                if(straights[j + i] != straights[j + i - 1] + 1){
+                    check=false;
+                    break;
+                }
+            }
+            if(check){
+                cardCombinations.straight = straights[i];
+            }
+        }
+
+        Object.keys(cardCombinations.figures).map(figure=>{
+                cardCombinations.figures[figure] = allCards.filter(card=>card.figure == figure).length;
+            }
+        );
+
+        Object.keys(cardCombinations.figures).map(figure=>{
+            if(cardCombinations.figures[figure]>=5){
+                let tempDeck = allCards.filter(card=>card.figure == figure).sort((a,b)=>a.value-b.value);
+                cardCombinations.flushCards = tempDeck;
+                tempDeck = [...new Set(tempDeck)];
+                console.log(tempDeck);
+
+                for(let i=0; i<tempDeck.length-4; i++){
+                    let check = true;
+                    for(let j=1; j<5; j++){
+                        if(tempDeck[j + i].value != tempDeck[j + i - 1].value + 1){
+                            check=false;
+                            break;
+                        }
+                    }
+                    if(check){
+                        cardCombinations.straightFlush = tempDeck[i].value;
+                    }
+                }
+        
+
+            };
+        });
+
+
+        console.log(cardCombinations);
+
+
+    }
+        
+    })(scope, jQuery);
+    

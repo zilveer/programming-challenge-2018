@@ -8,7 +8,6 @@ class Deck
     {
         this.cards = [];
         this.populateDeck();
-        this.shuffleDeck();
     }
 
     /**
@@ -32,7 +31,7 @@ class Deck
 
         for (let i = 2; i < 15; i++)
         {
-            let card = new Card("Spade", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_spades.svg`);
+            let card = new Card("Spades", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_spades.svg`);
             this.cards.push(card);
         }
 
@@ -44,15 +43,16 @@ class Deck
 
         for (let i = 2; i < 15; i++)
         {
-            let card = new Card("Heart", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_hearts.svg`);
+            let card = new Card("Hearts", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_hearts.svg`);
             this.cards.push(card);
         }
 
         for (let i = 2; i < 15; i++)
         {
-            let card = new Card("Diamond", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_diamonds.svg`);
+            let card = new Card("Diamonds", i, `./assets/Playing Cards/Playing Cards (.SVG)/${i}_of_diamonds.svg`);
             this.cards.push(card);
         }
+        this.shuffleDeck();
     }
 
     shuffleDeck()
