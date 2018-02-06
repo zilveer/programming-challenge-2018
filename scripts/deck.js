@@ -8,6 +8,8 @@ class Deck
     {
         this.cards = [];
         this.populateDeck();
+        this.shuffleDeck();
+        // console.log("Deck after shuffle ", this.cards.slice());
     }
 
     /**
