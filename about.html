@@ -9,10 +9,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="styles/main.css">
-    <title>Texas hold'em</title>
+    <title>About</title>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script defer src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!--<script defer src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -20,7 +20,7 @@
     <script defer src="scripts/chip.js"></script>
     <script defer src="scripts/card.js"></script>
     <script defer src="scripts/deck.js"></script>
-    <script defer src="scripts/main.js"></script>
+    <script defer src="scripts/main.js"></script>-->
   </head>
 
   <body>
@@ -83,53 +83,19 @@
     <div class="container-fluid">
       <div class="row">
         <!-- Game table -->
-        <main class="col-sm-12 col-lg-8 bg-primary">
+        <main class="col-sm-12 col-lg-8">
+            <h1 class="font-weight-bold">About</h1><br>
+            <h3 class="font-weight-bold">Our Team</h3>
+            <p>
+              Bartosz Bielinski<br>
+              Sam Scott<br>
+              Kestutis Zaltauskas<br>
+              Ifeoluwa Amusan<br>
+              Jan jaworski<br><br>
+
+              We hope you enjoy our variation of Texas Hold'em Poker!
+            </p>
         </main>
-
-        <!-- Game controls -->
-        <aside class="col-sm-12 col-lg-4 bg-secondary border-left">
-          <!-- Current player name -->
-          <div class="d-flex justify-content-center">
-            <h2 id="playerName">Player</h2>
-          </div>
-
-          <!-- Cards on hand -->
-          <div class="d-flex justify-content-around">
-            <img id="playerCard1" class="col-sm-6" src="./assets/Playing Cards/Playing Cards (.SVG)/2_of_clubs.svg">
-            <img id="playerCard2" class="col-sm-6" src="./assets/Playing Cards/Playing Cards (.SVG)/4_of_diamonds.svg">
-          </div>
-
-          <div class="mt-2 border-top"></div>
-
-          <!-- Game buttons -->
-          <h4 class="col-sm-12">Test</h4>
-          <div class="col-sm-12">
-            <button id="foldButton" class="btn btn-primary" type="button" name="button">Fold</button>
-            <button id="checkCallButton" class="btn btn-primary" type="button" name="button">Check</button>
-            <button id="raiseButton" class="btn btn-success" type="button" name="button">Raise</button>
-          </div>
-
-          <div class="mt-2 col-sm-12">
-            <label for="raiseInput">Raise amount:</label>
-            <input id="raiseInput" type="number" name="raiseAmount" value="1">
-          </div>
-          <div class="col-sm-12">
-            <input id="raiseSlider" type="range" min="1" max="100" value="1">
-          </div>
-
-          <div class="mt-2 border-top"></div>
-
-          <!-- Statistics -->
-          <h4 class="col-sm-12">Statistics</h4>
-          <p class="col-sm-12">Stake: <span id="playerStake">5000</span></p>
-          <p class="col-sm-12">Role: <span id="role"></span></p>
-          <p class="col-sm-12">Pot: <span id="pot">0</span></p>
-          <p class="col-sm-12">Small blind: <span id="smallBlind">0</span></p>
-          <p class="col-sm-12">Big blind: <span id="bigBlind">0</span></p>
-          <p class="col-sm-12">Wins: <span id="wins">0</span></p>
-          <p class="col-sm-12">Loses: <span id="loses">0</span></p>
-
-        </aside>
       </div>
     </div>
   </body>
