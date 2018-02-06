@@ -4,7 +4,7 @@ const scope = {};
 {
     //let scope.smth will create "public" variable accessible by scope.smth
     //let smth will create local variable not accessible in console
-    const GAME = {
+    const GAME      = {
         pot: 0,
         cardsOnTable: [],
         numberOfPlayers: null,
@@ -16,7 +16,7 @@ const scope = {};
         foldedPlayers: []
     };
     GAME.smallBlind = GAME.bigBlind / 2;
-    const pot = $("#pot");
+    const pot       = $("#pot");
 
     scope.thing = GAME;
 
@@ -81,36 +81,32 @@ const scope = {};
     /* Check matches the last bet */
     checkButton.click(() =>
     {
-        let currentHighestBet = 0;
+        let currentHighestBet = getHighestPlayerBet();
+        console.log("Highest bet " + currentHighestBet);
 
-
-        /* loop though players to get the highest be amount */
-        for (let i=0; i<GAME.players.length; i++)
+        if (GAME.players[currentPlayerIndex].betAmount < currentHighestBet)
         {
-            if(GAME.players[i].betAmount >= currentHighestBet)
-            {
-                currentHighestBet = GAME.players[i].betAmount;
-            }
-        }
+            // Then CALL
+            console.log("CALL");
 
-
-        if(GAME.players[currentPlayerIndex].betAmount < currentHighestBet)
-        {
-            // Then call
             /* Make the player match the current highest bet */
             GAME.players[currentPlayerIndex].betAmount = parseInt(currentHighestBet);
+
             /* Move to the next player */
             setNextPlayer();
         }
 
-        if(GAME.players[currentPlayerIndex].betAmount === currentHighestBet)
+        else if (GAME.players[currentPlayerIndex].betAmount === currentHighestBet)
         {
-            // Then check
+            // Then CHECK
+            console.log("CHECK");
+
             GAME.players[currentPlayerIndex].check = true;
+
             /* Move to the next player */
             setNextPlayer();
-        }
 
+        }
 
         /* Make the player match the bet/money in the pot */
         // GAME.players[currentPlayerIndex].betAmount = parseInt(GAME.pot);
@@ -126,15 +122,41 @@ const scope = {};
         console.log(GAME.foldedPlayers);
     });
 
-    /* Raise the bet amount by the value in the raiseInput text field */
+    /* Raise the bet amount by the minimum value needed to match the current highest player bet */
     raiseButton.click(() =>
     {
-        /* Raise the pot amount by the amount specified in the raiseInput input field */
-        GAME.pot += parseInt(GAME.pot + parseInt(raiseInput.val()) );
+        let currentHighestBet           = getHighestPlayerBet();
+        let differenceToMatchHighestBet = currentHighestBet - GAME.players[currentPlayerIndex].betAmount;
+
+        /* parseInt(differenceToMatchHighestBet +
+         (differenceToMatchHighestBet where the smallest raise value must be differenceToMatchHighestBet  ) )
+         */
+        // GAME.pot += parseInt(
+        //     differenceToMatchHighestBet +
+        //     (differenceToMatchHighestBet === 0) ?
+        //         differenceToMatchHighestBet + parseInt(raiseInput.val()) :
+        //         differenceToMatchHighestBet);
+
+        /* If the current player bet is the same as the highest bet among all the players */
+        if (differenceToMatchHighestBet === 0)
+        {
+
+            GAME.players[currentPlayerIndex].betAmount = currentHighestBet + parseInt(raiseInput.val());
+            GAME.pot += currentHighestBet + parseInt(raiseInput.val());
+        }
+        else
+        {
+            GAME.players[currentPlayerIndex].betAmount = currentHighestBet + parseInt(raiseInput.val());
+            GAME.pot += currentHighestBet + parseInt(raiseInput.val());
+        }
+
+        /* Show the pot amount on screen */
         pot.text(GAME.pot);
 
-        GAME.players[currentPlayerIndex].betAmount = parseInt(GAME.pot);
         setNextPlayer();
+
+        console.log(GAME.players);
+        console.log(GAME.foldedPlayers);
     });
 
     function startGame()
@@ -157,8 +179,6 @@ const scope = {};
         /* Make the third player the current player */
         setCurrentPlayer(2);
 
-
-
         /* Show the card image for the 2 cards the first player has*/
         $("#playerCard1").attr("src", GAME.players[currentPlayerIndex].cards[0].imagePath);
         $("#playerCard2").attr("src", GAME.players[currentPlayerIndex].cards[1].imagePath);
@@ -166,15 +186,17 @@ const scope = {};
         console.log(GAME.players);
     }
 
+    /**
+     * Sets the big and small blind roles for the first 2 players
+     */
     function allocateBlindRoles()
     {
-        GAME.players[0].role = "SMALL BLIND";
+        GAME.players[0].role      = "SMALL BLIND";
         GAME.players[0].betAmount = parseInt(GAME.smallBlind);
 
-        GAME.players[1].role = "BIG BLIND";
+        GAME.players[1].role      = "BIG BLIND";
         GAME.players[1].betAmount = parseInt(GAME.bigBlind);
     }
-
 
     function setCurrentPlayer(playerIndex)
     {
@@ -213,6 +235,26 @@ const scope = {};
     }
 
     /**
+     * Gets the highest bet a player has placed.
+     * @returns {number} The highest bet amount a player has made.
+     */
+    function getHighestPlayerBet()
+    {
+        let currentHighestBet = 0;
+
+        /* loop though players to get the highest be amount */
+        for (let i = 0; i < GAME.players.length; i++)
+        {
+            if (GAME.players[i].betAmount >= currentHighestBet)
+            {
+                currentHighestBet = GAME.players[i].betAmount;
+            }
+        }
+
+        return currentHighestBet;
+    }
+
+    /**
      * Assigns 2 cards to a player and returns the Player object
      * @param playerName
      * @param stake
@@ -235,9 +277,9 @@ const scope = {};
 
     function createPlayerDiv(player)
     {
-        const name = player.name.replace(" ", "_");
-        const stake = player.stake;
-        const playerDiv = document.createElement('div');
+        const name          = player.name.replace(" ", "_");
+        const stake         = player.stake;
+        const playerDiv     = document.createElement('div');
         playerDiv.className = "col-sm-4";
         playerDiv.innerHTML = name + " " + stake;
 

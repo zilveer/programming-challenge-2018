@@ -17,7 +17,7 @@ class Player
         /* Used to determine role of the player */
         this.role = null;
 
-        this.betAmount  = null;
+        this.betAmount = 0;
 
         this.check = false;
 
