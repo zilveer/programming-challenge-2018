@@ -133,6 +133,7 @@ const scope = {};
         GAME.pot += parseInt(GAME.pot + parseInt(raiseInput.val()) );
         pot.text(GAME.pot);
 
+        GAME.players[currentPlayerIndex].stake -= parseInt(GAME.pot + parseInt(raiseInput.val()) );
         GAME.players[currentPlayerIndex].betAmount = parseInt(GAME.pot);
         setNextPlayer();
     });
@@ -157,8 +158,6 @@ const scope = {};
         /* Make the third player the current player */
         setCurrentPlayer(2);
 
-
-
         /* Show the card image for the 2 cards the first player has*/
         $("#playerCard1").attr("src", GAME.players[currentPlayerIndex].cards[0].imagePath);
         $("#playerCard2").attr("src", GAME.players[currentPlayerIndex].cards[1].imagePath);
@@ -180,27 +179,40 @@ const scope = {};
     {
         let playerNameHolder  = $("#playerName");
         let playerStakeHolder = $("#playerStake");
+        let playerBetHolder = $("#bet");
         currentPlayerIndex    = (playerIndex < GAME.players.length) ? playerIndex : 0;
 
         /* Show the current players name on screen */
         playerNameHolder.text(GAME.players[currentPlayerIndex].name);
-
         /* Show the current players stake on the screen */
         playerStakeHolder.text(GAME.players[currentPlayerIndex].stake);
+        /* Show the current players stake on screen */
+        playerBetHolder.text(GAME.players[currentPlayerIndex].betAmount);
     }
 
     function setNextPlayer()
     {
         let playerNameHolder = $("#playerName");
+        let playerStakeHolder = $("#playerStake");
+        let playerBetHolder = $("#bet");
+        let playerId = GAME.players[currentPlayerIndex].name.replace(" ", "_");
+        let lastPlayerCard = $(`#${playerId}`);
         const playerIndex    = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
 
         currentPlayerIndex = playerIndex;
 
-        /* Set the current player index to the current value of the currentPlayerIndex */
-        // GAME.currentPlayer = currentPlayerIndex;
-
         /* Show the current players name on screen */
         playerNameHolder.text(GAME.players[currentPlayerIndex].name);
+        /* Show the current players stake on screen */
+        playerStakeHolder.text(GAME.players[currentPlayerIndex].stake);
+        /* Show the current players stake on screen */
+        playerBetHolder.text(GAME.players[currentPlayerIndex].betAmount);
+
+        let previousPlayer = currentPlayerIndex-1;
+        if (previousPlayer < 0) {
+          previousPlayer = GAME.players.length -1;
+        }
+        lastPlayerCard.find(".bet").text(GAME.players[previousPlayer].betAmount);
 
         /* Show the two cards the current player has */
         for (let i = 0; i < 2; i++)
@@ -245,6 +257,7 @@ const scope = {};
           <div id='${name}' class='col-sm-4 border border-dark'>
             <div>Name: ${player.name}<div/>
             <div>Stake: ${player.stake}<div/>
+            <div>Bet: <span class="bet">${player.betAmount}</span><div/>
           </div>
           `);
     }
