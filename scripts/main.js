@@ -12,7 +12,7 @@ const scope = {};
         currentPlayer: null,
         bigBlind: 200,
         smallBlind: null,
-        winningPlayer: null,
+        winningPlayer: [],
         foldedPlayers: []
     };
     GAME.smallBlind = GAME.bigBlind / 2;
@@ -117,6 +117,8 @@ const scope = {};
         console.log(GAME.players);
         console.log(GAME.foldedPlayers);
     });
+
+    //TODO: Announce the winner if there is all but one player has folded
 
     /* Raise the bet amount by the value in the raiseInput text field */
     raiseButton.click(() =>
@@ -231,6 +233,13 @@ const scope = {};
         const playerIndex    = (currentPlayerIndex + 1 < GAME.players.length) ? currentPlayerIndex + 1 : 0;
 
         currentPlayerIndex = playerIndex;
+
+        if(GAME.foldedPlayers.length === GAME.numberOfPlayers - 1)
+        {
+            console.log("THERE IS A WINNER");
+            // Winner is the only player left in the GAME.players array
+            console.log("WINNER IS " + GAME.players[0].name);
+        }
 
         /* Set the current player index to the current value of the currentPlayerIndex */
         // GAME.currentPlayer = currentPlayerIndex;
