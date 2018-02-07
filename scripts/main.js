@@ -462,15 +462,13 @@ const scope = {};
                }
                GAME.pot-=diff;
                let fullPot = GAME.pot;
+               let w = "";
                for(const winner of winners){
                    winner.stake+=fullPot/winners.length;
                    winner.wins++;
+                   w+=winner.name+" ";
                }
-               for(const loser of GAME.players){
-                   if(!winners.indexOf(loser)){
-                       loser.loses++;
-                   }
-               }
+               alert("GAME FINISHE0D "+w.trim());
                GAME.pot = diff;
                startGame(true);
             }
