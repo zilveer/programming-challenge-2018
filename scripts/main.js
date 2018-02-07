@@ -309,13 +309,17 @@ const scope = {};
     function allocateBlindRoles()
     {
         GAME.players[0].role      = "SMALL BLIND";
-        GAME.players[0].betAmount = parseInt(GAME.smallBlind);
         GAME.lastPlayerToRaise    = 0;
-        GAME.players[0].stake -= GAME.smallBlind;
+        if(GAME.players[0].stake>=GAME.smallBlind){
+            GAME.players[0].betAmount = parseInt(GAME.smallBlind);
+            GAME.players[0].stake -= GAME.smallBlind;
+        }
 
         GAME.players[1].role      = "BIG BLIND";
-        GAME.players[1].betAmount = parseInt(GAME.bigBlind);
-        GAME.players[1].stake -= GAME.bigBlind;
+        if(GAME.players[1].stake>=GAME.bigBlind){
+            GAME.players[1].betAmount = parseInt(GAME.bigBlind);
+            GAME.players[1].stake -= GAME.bigBlind;
+        }
     }
 
     function setCurrentPlayer(playerIndex)
