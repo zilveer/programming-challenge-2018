@@ -263,6 +263,9 @@ const scope = {};
             for (const player of GAME.players)
             {
                 player.betAmount = 0;
+                player.cards = [];
+                player.addCard(deck.drawCard());
+                player.addCard(deck.drawCard());
             }
             GAME.phase = 0;
             GAME.foldedPlayers = [];
@@ -308,13 +311,17 @@ const scope = {};
     function allocateBlindRoles()
     {
         GAME.players[0].role      = "SMALL BLIND";
-        GAME.players[0].betAmount = parseInt(GAME.smallBlind);
         GAME.lastPlayerToRaise    = 0;
-        GAME.players[0].stake -= GAME.smallBlind;
+        if(GAME.players[0].stake>=GAME.smallBlind){
+            GAME.players[0].betAmount = parseInt(GAME.smallBlind);
+            GAME.players[0].stake -= GAME.smallBlind;
+        }
 
         GAME.players[1].role      = "BIG BLIND";
-        GAME.players[1].betAmount = parseInt(GAME.bigBlind);
-        GAME.players[1].stake -= GAME.bigBlind;
+        if(GAME.players[1].stake>=GAME.bigBlind){
+            GAME.players[1].betAmount = parseInt(GAME.bigBlind);
+            GAME.players[1].stake -= GAME.bigBlind;
+        }
     }
 
     function setCurrentPlayer(playerIndex)
@@ -363,12 +370,13 @@ const scope = {};
 
             // Reset the pot
             GAME.pot = 0;
+            alert("GAME WON", GAME.winningPlayer[0].name,"won");
             startGame(true);
 
             console.log("THERE IS A WINNER");
             // Winner is the only player left in the GAME.players array
             console.log("WINNER IS " + GAME.players[0].name);
-            alert("BOB's a winner");
+            //alert("BOB's a winner");
         }
 
         $("#wins").text(GAME.players[currentPlayerIndex].wins);
@@ -473,7 +481,7 @@ const scope = {};
                    winner.wins++;
                    w+=winner.name+" ";
                }
-               alert("GAME FINISHED "+w.trim());
+               alert("GAME FINISHED\n"+w+"won.");
                GAME.pot = diff;
                startGame(true);
             }
