@@ -17,6 +17,16 @@ class Player
         /* Used to determine role of the player */
         this.role = null;
 
+        this.betAmount = 0;
+
+        this.check = false;
+
+        this.isAllIn = false;
+
+        this.wins = 0;
+
+        this.losses = 0;
+
     }
 
     /* Used to assign this player with a set of cards */

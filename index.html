@@ -41,6 +41,8 @@
               <option value="6">6</option>
               <option value="7">7</option>
               <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
             </select>
 
             <label for="initalStake">Initial stake:</label>
@@ -84,6 +86,14 @@
       <div class="row">
         <!-- Game table -->
         <main class="col-sm-12 col-lg-8 bg-primary">
+          <!--  -->
+
+
+          <!-- List of all players -->
+          <div id="playerList" class="row bg-danger"></div>
+          <div id="tableCards" class="row bg-info">
+          </div>
+
         </main>
 
         <!-- Game controls -->
@@ -124,6 +134,7 @@
           <p class="col-sm-12">Stake: <span id="playerStake">5000</span></p>
           <p class="col-sm-12">Role: <span id="role"></span></p>
           <p class="col-sm-12">Pot: <span id="pot">0</span></p>
+          <p class="col-sm-12">Bet: <span id="bet">0</span></p>
           <p class="col-sm-12">Small blind: <span id="smallBlind">0</span></p>
           <p class="col-sm-12">Big blind: <span id="bigBlind">0</span></p>
           <p class="col-sm-12">Wins: <span id="wins">0</span></p>
