@@ -23,7 +23,9 @@ class Player
 
         this.isAllIn = false;
 
+        this.wins = 0;
 
+        this.losses = 0;
 
     }
 

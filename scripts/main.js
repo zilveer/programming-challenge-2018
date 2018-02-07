@@ -264,7 +264,7 @@ const scope = {};
             {
                 player.betAmount = 0;
             }
-            Game.phase = 0;
+            GAME.phase = 0;
             GAME.foldedPlayers = [];
             GAME.cardsOnTable  = [];
             $('#tableCards').html("");
