@@ -288,6 +288,7 @@ const scope = {};
         {
             $(`#Player_${i + 1}`).find(".bet").text(GAME.players[i].betAmount);
             $(`#Player_${i + 1}`).find(".stake").text(GAME.players[i].stake);
+            $("#wins").text(GAME.players[i].wins);
 
         }
 
