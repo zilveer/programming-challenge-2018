@@ -267,6 +267,7 @@ const scope = {};
             GAME.phase = 0;
             GAME.foldedPlayers = [];
             GAME.cardsOnTable  = [];
+            $("#wins").text(GAME.players[currentPlayerIndex].wins);
             $('#tableCards').html("");
         }
         
@@ -288,7 +289,7 @@ const scope = {};
         {
             $(`#Player_${i + 1}`).find(".bet").text(GAME.players[i].betAmount);
             $(`#Player_${i + 1}`).find(".stake").text(GAME.players[i].stake);
-            $("#wins").text(GAME.players[i].wins);
+
 
         }
 
@@ -368,6 +369,8 @@ const scope = {};
             console.log("WINNER IS " + GAME.players[0].name);
             alert("BOB's a winner");
         }
+
+        $("#wins").text(GAME.players[currentPlayerIndex].wins);
 
         let currentHighestBet = getHighestPlayerBet();
         if (GAME.lastPlayerToRaise == currentPlayerIndex && GAME.players[currentPlayerIndex].betAmount == currentHighestBet)
