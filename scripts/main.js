@@ -406,6 +406,12 @@ const scope = {};
                let fullPot = GAME.pot;
                for(const winner of winners){
                    winner.stake+=fullPot/winners.length;
+                   winner.wins++;
+               }
+               for(const loser of GAME.players){
+                   if(!winners.indexOf(loser)){
+                       loser.loses++;
+                   }
                }
                GAME.pot = diff;
                startGame(true);
