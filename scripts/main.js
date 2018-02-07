@@ -141,6 +141,8 @@ const scope = {};
     /* Raise the bet amount by the value in the raiseInput text field */
     raiseButton.click(() =>
     {
+        //TODO dont allow player to raise more than is in the stake for that player
+
         let currentHighestBet           = getHighestPlayerBet();
         let differenceToMatchHighestBet = currentHighestBet - GAME.players[currentPlayerIndex].betAmount;
 
@@ -183,6 +185,8 @@ const scope = {};
         deck                 = new Deck();
         GAME.numberOfPlayers = document.getElementById('numberOfPlayers').value;
         const initialStake   = document.getElementById('initalStake').value;
+        const smallBlind     = $("#smallBlind");
+        const bigBlind       = $("#bigBlind");
 
         /* Put each player inside an array */
         for (let i = 0; i < GAME.numberOfPlayers; i++)
@@ -201,6 +205,9 @@ const scope = {};
         /* Show the card image for the 2 cards the first player has*/
         $("#playerCard1").attr("src", GAME.players[currentPlayerIndex].cards[0].imagePath);
         $("#playerCard2").attr("src", GAME.players[currentPlayerIndex].cards[1].imagePath);
+
+        smallBlind.text(GAME.smallBlind);
+        bigBlind.text(GAME.bigBlind);
 
         for (let i = 0; i < GAME.players.length; i++)
         {
@@ -261,6 +268,7 @@ const scope = {};
 
         currentPlayerIndex = playerIndex;
 
+        /* Check if there is a winner because all the other players but one has folded */
         if (GAME.foldedPlayers.length === GAME.numberOfPlayers - 1)
         {
             GAME.isWinnerPresent = true;
