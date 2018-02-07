@@ -264,6 +264,7 @@ const scope = {};
             {
                 player.betAmount = 0;
             }
+            Game.phase = 0;
             GAME.foldedPlayers = [];
             GAME.cardsOnTable  = [];
             $('#tableCards').html("");
@@ -361,6 +362,7 @@ const scope = {};
 
             // Reset the pot
             GAME.pot = 0;
+            startGame(true);
 
             console.log("THERE IS A WINNER");
             // Winner is the only player left in the GAME.players array
