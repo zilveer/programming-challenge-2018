@@ -21,6 +21,8 @@ class Player
 
         this.check = false;
 
+        this.isAllIn = false;
+
 
 
     }
