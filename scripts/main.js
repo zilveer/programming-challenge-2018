@@ -263,6 +263,9 @@ const scope = {};
             for (const player of GAME.players)
             {
                 player.betAmount = 0;
+                player.cards = [];
+                player.addCard(deck.drawCard());
+                player.addCard(deck.drawCard());
             }
             GAME.phase = 0;
             GAME.foldedPlayers = [];
@@ -469,7 +472,7 @@ const scope = {};
                    winner.wins++;
                    w+=winner.name+" ";
                }
-               alert("GAME FINISHED "+w.trim());
+               alert("GAME FINISHED\n"+w+"won.");
                GAME.pot = diff;
                startGame(true);
             }
