@@ -269,7 +269,7 @@ const scope = {};
             GAME.cardsOnTable  = [];
             $('#tableCards').html("");
         }
-
+        
         allocateBlindRoles();
         GAME.pot += GAME.bigBlind + GAME.smallBlind;
         pot.text(GAME.pot);
@@ -339,8 +339,6 @@ const scope = {};
         let playerId          = GAME.players[(currentPlayerIndex > 0) ? currentPlayerIndex - folded : currentPlayerIndex].name.replace(" ", "_");
         let lastPlayerCard    = $(`#${playerId}`);
         let playerIndex       = (currentPlayerIndex >= GAME.players.length) ? 0 : currentPlayerIndex;
-
-
 
         if (!folded)
         {
@@ -426,6 +424,7 @@ const scope = {};
         return currentHighestBet;
     }
 
+
     //NEW ROUND
     function newRound()
     {
@@ -455,22 +454,25 @@ const scope = {};
                 GAME.cardsOnTable.push(cardDrawn);
                 break;
             }
-            case 4:
-            {
-                let winners = checkForWinners();
-                let diff    = 0;
-                if (winners.length > 1)
-                {
-                    diff = GAME.pot % winners.length;
-                }
-                GAME.pot -= diff;
-                let fullPot = GAME.pot;
-                for (const winner of winners)
-                {
-                    winner.stake += fullPot / winners.length;
-                }
-                GAME.pot = diff;
-                startGame(true);
+            case 4:{
+               let winners = checkForWinners();
+               let diff=0;
+               if(winners.length>1){
+                   diff = GAME.pot%winners.length;
+               }
+               GAME.pot-=diff;
+               let fullPot = GAME.pot;
+               for(const winner of winners){
+                   winner.stake+=fullPot/winners.length;
+                   winner.wins++;
+               }
+               for(const loser of GAME.players){
+                   if(!winners.indexOf(loser)){
+                       loser.loses++;
+                   }
+               }
+               GAME.pot = diff;
+               startGame(true);
             }
         }
     }
