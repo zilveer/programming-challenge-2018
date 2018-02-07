@@ -19,7 +19,7 @@ class Card
     {
         this.image.onload = () =>
         {
-            $('main').append(`<img src='${this.image.src}'>`);
+            $('#tableCards').append(`<img src='${this.image.src}'>`);
         };
         this.image.src    = this.imagePath;
     }

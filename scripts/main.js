@@ -15,7 +15,8 @@ const scope = {};
         bigBlind: 200,
         smallBlind: null,
         isWinnerPresent: false,
-        lastPlayerToRaise: null
+        lastPlayerToRaise: null,
+        phase: 0
     };
     GAME.smallBlind = GAME.bigBlind / 2;
     const pot       = $("#pot");
@@ -34,7 +35,7 @@ const scope = {};
     const checkButton = $("#checkCallButton");
     const startButton = $('#startButton');
 
-    startButton.click(startGame);
+    startButton.click(()=>{startGame(false)});
 
     // source: https://stackoverflow.com/questions/9894339/disallow-twitter-bootstrap-modal-window-from-closing
     // Load modal
@@ -78,6 +79,12 @@ const scope = {};
 
             /* Remove the current player from the players array */
             GAME.players.splice(currentPlayerIndex, 1);
+            if(GAME.lastPlayerToRaise > currentPlayerIndex){
+                GAME.lastPlayerToRaise--;
+                if(GAME.lastPlayerToRaise < 0){
+                    GAME.lastPlayerToRaise = GAME.players.length;
+                }
+            }
 
             console.log(GAME.players);
 
@@ -99,6 +106,10 @@ const scope = {};
     {
         let currentHighestBet = getHighestPlayerBet();
         console.log("Highest bet " + currentHighestBet);
+
+        let highestBet = getHighestPlayerBet();
+        let diff = highestBet - GAME.players[currentPlayerIndex].betAmount;
+        GAME.players[currentPlayerIndex].stake -= diff;
 
         if (GAME.players[currentPlayerIndex].betAmount < currentHighestBet)
         {
@@ -156,31 +167,35 @@ const scope = {};
         //         differenceToMatchHighestBet);
 
         /* If the current player bet is the same as the highest bet among all the players */
+        let prevBet = GAME.players[currentPlayerIndex].betAmount;
+        console.log(differenceToMatchHighestBet);
         if (differenceToMatchHighestBet === 0)
         {
 
-            GAME.players[currentPlayerIndex].betAmount = currentHighestBet + parseInt(raiseInput.val());
-            GAME.pot += currentHighestBet + parseInt(raiseInput.val());
+            GAME.players[currentPlayerIndex].betAmount += parseInt(raiseInput.val());
+            GAME.pot += parseInt(raiseInput.val());
         }
         else
         {
-            GAME.players[currentPlayerIndex].betAmount = differenceToMatchHighestBet * 2 + parseInt(raiseInput.val());
-            GAME.pot += differenceToMatchHighestBet * 2 + parseInt(raiseInput.val());
+            GAME.players[currentPlayerIndex].betAmount = currentHighestBet + differenceToMatchHighestBet + parseInt(raiseInput.val());
+            GAME.pot += currentHighestBet + differenceToMatchHighestBet + parseInt(raiseInput.val());
         }
 
         /* Show the pot amount on screen */
         pot.text(GAME.pot);
 
         // GAME.players[currentPlayerIndex].stake -= parseInt(GAME.pot + parseInt(raiseInput.val()));
-        GAME.players[currentPlayerIndex].stake -= parseInt(GAME.players[currentPlayerIndex].betAmount + parseInt(raiseInput.val()));
+        let betDiff = GAME.players[currentPlayerIndex].betAmount - prevBet;
+        GAME.players[currentPlayerIndex].stake -= betDiff;
         // GAME.players[currentPlayerIndex].betAmount = parseInt(GAME.pot);
+        GAME.lastPlayerToRaise = currentPlayerIndex;
         setNextPlayer();
 
         console.log(GAME.players);
         console.log(GAME.foldedPlayers);
     });
 
-    function startGame()
+    function startGame(reset = false)
     {
         deck                 = new Deck();
         GAME.numberOfPlayers = document.getElementById('numberOfPlayers').value;
@@ -188,15 +203,30 @@ const scope = {};
         const smallBlind     = $("#smallBlind");
         const bigBlind       = $("#bigBlind");
 
-        /* Put each player inside an array */
-        for (let i = 0; i < GAME.numberOfPlayers; i++)
-        {
-            GAME.players.push(setupPlayer("Player " + (i + 1), initialStake));
+        if(!reset){
+            /* Put each player inside an array */
+            for (let i = 0; i < GAME.numberOfPlayers; i++)
+            {
+                GAME.players.push(setupPlayer("Player " + (i + 1), initialStake));
+            }
+
+
+        }else{
+            for(const player of GAME.foldedPlayers.sort((a,b)=>a.name-b.name)){
+                GAME.players.splice(player.name.replace(/[^\d]/g,'')-1, 0, player);
+            }
+
+            for(const player of GAME.players){
+                player.betAmount = 0;
+            }
+            GAME.foldedPlayers = [];
+            GAME.cardsOnTable = [];
+            $('#tableCards').html("");
         }
 
-        allocateBlindRoles();
 
-        GAME.pot = GAME.bigBlind + GAME.smallBlind;
+        allocateBlindRoles();
+        GAME.pot += GAME.bigBlind + GAME.smallBlind;
         pot.text(GAME.pot);
 
         /* Make the third player the current player */
@@ -212,6 +242,7 @@ const scope = {};
         for (let i = 0; i < GAME.players.length; i++)
         {
             $(`#Player_${i + 1}`).find(".bet").text(GAME.players[i].betAmount);
+            $(`#Player_${i + 1}`).find(".stake").text(GAME.players[i].stake);
 
         }
 
@@ -231,9 +262,12 @@ const scope = {};
     {
         GAME.players[0].role      = "SMALL BLIND";
         GAME.players[0].betAmount = parseInt(GAME.smallBlind);
+        GAME.lastPlayerToRaise = 0;
+        GAME.players[0].stake-=GAME.smallBlind;
 
         GAME.players[1].role      = "BIG BLIND";
         GAME.players[1].betAmount = parseInt(GAME.bigBlind);
+        GAME.players[1].stake-=GAME.bigBlind;
     }
 
     function setCurrentPlayer(playerIndex)
@@ -288,6 +322,13 @@ const scope = {};
             alert("BOB's a winner");
         }
 
+        let currentHighestBet = getHighestPlayerBet();
+        if(GAME.lastPlayerToRaise == currentPlayerIndex && GAME.players[currentPlayerIndex].betAmount == currentHighestBet){
+            GAME.phase++;
+            newRound();
+
+        }
+
         /* Set the current player index to the current value of the currentPlayerIndex */
         // GAME.currentPlayer = currentPlayerIndex;
 
@@ -304,6 +345,7 @@ const scope = {};
             previousPlayer = GAME.players.length - 1;
         }
         lastPlayerCard.find(".bet").text(GAME.players[previousPlayer].betAmount);
+        lastPlayerCard.find(".stake").text(GAME.players[previousPlayer].stake);
 
         /* Show the two cards the current player has */
         for (let i = 0; i < 2; i++)
@@ -333,6 +375,47 @@ const scope = {};
         }
 
         return currentHighestBet;
+    }
+
+
+    //NEW ROUND
+    function newRound(){
+        switch(GAME.phase){
+            case 1:{
+                for (let i = 0; i < 3; i++) {
+                    let cardDrawn = deck.drawCard();
+                    cardDrawn.addToTable();
+                    GAME.cardsOnTable.push(cardDrawn);
+                }
+                break;
+            }
+            case 2:{
+                let cardDrawn = deck.drawCard();
+                cardDrawn.addToTable();
+                GAME.cardsOnTable.push(cardDrawn);
+                break;
+            }
+            case 3:{
+                let cardDrawn = deck.drawCard();
+                cardDrawn.addToTable();
+                GAME.cardsOnTable.push(cardDrawn);
+                break;
+            }
+            case 4:{
+               let winners = checkForWinners();
+               let diff=0;
+               if(winners.length>1){
+                   diff = GAME.pot%winners.length;
+               }
+               GAME.pot-=diff;
+               let fullPot = GAME.pot;
+               for(const winner of winners){
+                   winner.stake+=fullPot/winners.length;
+               }
+               GAME.pot = diff;
+               startGame(true);
+            }
+        }
     }
 
     /**
@@ -367,7 +450,7 @@ const scope = {};
         $('#playerList').append(`
           <div id='${name}' class='col-sm-4 border border-dark'>
             <div>Name: ${player.name}<div/>
-            <div>Stake: ${player.stake}<div/>
+            <div>Stake: <span class='stake'>${player.stake}</span><div/>
             <div>Bet: <span class="bet">${player.betAmount}</span><div/>
           </div>
           `);
