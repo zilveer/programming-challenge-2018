@@ -368,12 +368,13 @@ const scope = {};
 
             // Reset the pot
             GAME.pot = 0;
+            alert("GAME WON", GAME.winningPlayer[0].name,"won");
             startGame(true);
 
             console.log("THERE IS A WINNER");
             // Winner is the only player left in the GAME.players array
             console.log("WINNER IS " + GAME.players[0].name);
-            alert("BOB's a winner");
+            //alert("BOB's a winner");
         }
 
         let currentHighestBet = getHighestPlayerBet();
