@@ -359,6 +359,7 @@ const scope = {};
 
             /* Give the money in the pot to the winning player */
             GAME.winningPlayer[0].stake += GAME.pot;
+            GAME.winningPlayer[0].wins++;
 
             // Reset the pot
             GAME.pot = 0;
@@ -472,7 +473,7 @@ const scope = {};
                    winner.wins++;
                    w+=winner.name+" ";
                }
-               alert("GAME FINISHE0D "+w.trim());
+               alert("GAME FINISHED "+w.trim());
                GAME.pot = diff;
                startGame(true);
             }
